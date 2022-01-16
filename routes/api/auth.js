@@ -23,6 +23,7 @@ router.get('/',auth, async (req,res)=> {
 
 //@route Post api/auth
 //authenticate user and get token
+//login
 router.post('/', [
    
     check('email','please include an email')

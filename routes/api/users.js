@@ -8,17 +8,21 @@ const { check, validationResult } = require('express-validator')
 
 const User = require('../../models/User')
 //@route Post api/users
+//register
 router.post('/', [
     check('name', 'Name is required')
-    .not().
-    isEmpty(),
+    .not()
+    .isEmpty(),
 
     check('email','please include an email')
     .isEmail(),
 
     check('password','please enter a passoword of more than length 6')
-    .isLength({min:6})
+    .isLength({min:6}),
 
+    check('type_of','please enter user type')
+    .not()
+    .isEmpty()
 ], async (req,res)=> {
 
     const errors =await validationResult(req)
@@ -27,7 +31,7 @@ router.post('/', [
     }
     //console.log(req.body)
 
-    const { name, email, password} = req.body
+    const { name, email, password,type_of} = req.body
 
     try{
      // see if user exists
@@ -50,7 +54,8 @@ router.post('/', [
         name,
         email,
         avatar,
-        password
+        password,
+        type_of
     })
 
 

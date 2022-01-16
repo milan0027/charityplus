@@ -104,7 +104,7 @@ router.post('/',[auth,[
 
 
 //route get api/profile/user
-//get all profiles
+//get all user profiles
 
 router.get('/user', async (req, res)=>{
     try {
@@ -124,7 +124,7 @@ router.get('/user', async (req, res)=>{
 })
 
 //route get api/profile/user/:user_id
-//get all profiles
+//get a user profile
 
 router.get('/user/:user_id', async (req, res)=>{
     try {
@@ -149,7 +149,7 @@ router.get('/user/:user_id', async (req, res)=>{
 })
 
 //route get api/profile/organization
-//get all profiles
+//get all organisation profiles
 
 router.get('/organization', async (req, res)=>{
     try {
@@ -169,7 +169,7 @@ router.get('/organization', async (req, res)=>{
 })
 
 //route get api/profile/organization/:user_id
-//get all profiles
+//get an organisaion profiles
 
 router.get('/organization/:user_id', async (req, res)=>{
     try {
@@ -178,7 +178,6 @@ router.get('/organization/:user_id', async (req, res)=>{
             'user',
             ['name','avatar']
         )
-        if(!profile)
         return res.status(400).json({msg: 'profile not found'})
 
         res.json(profile)
@@ -193,6 +192,23 @@ router.get('/organization/:user_id', async (req, res)=>{
     }
 })
 
+// @route  DELETE api/profile 
+// @desc    delete profile,user,posts
+// @access  Private
+router.delete('/',auth,async(req,res)=>{
+    try{
+        //remove user posts
 
+
+        //remove profile
+        await Profile.findOneAndRemove({user: req.user.id});
+        //remove user
+        await User.findByIdAndRemove({_id: req.user.id});
+        res.json({ msg: 'user deleted'});
+    }catch(e){
+        console.log(e.message);
+        res.status(500).send('server error');
+    }
+});
 
 module.exports = router
