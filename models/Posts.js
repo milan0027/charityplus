@@ -48,8 +48,8 @@ const PostSchema = new Schema({
                 type:String
             },
             images:{
-                type: [String],
-                required: true
+                type: [String]
+                // required: true
             },
             avatar: {
                 type: String
