@@ -3,9 +3,9 @@ const express = require("express")
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 const auth = require('../../middleware/auth')
-const Posts = require("../../models/Posts")
+const Post = require("../../models/Post")
 const User = require("../../models/User")
-
+const Comment = require("../../models/Comment")
 
 //@route GET api/posts
 //desc   create a post
@@ -25,7 +25,7 @@ router.post('/',[ auth, [
         if(!user.type_of)
         return res.status(400).json({ errors: [{"msg": "you are not allowed to post"}]})
 
-        const newPost = new Posts({
+        const newPost = new Post({
             text: req.body.text,
             name: user.name,
             avatar: user.avatar,
@@ -71,7 +71,7 @@ router.get('/', auth, async(req,res)=>{
 router.get('/:id', auth, async(req,res)=>{
 
     try {
-        const post = await Post.findById(req.params.id)
+        const post = await Post.findById(req.params.id).populate('comments'); //do we need to nest populate the user..also do we need to populate user of post
 
         if(!post)
         return res.status(404).json({msg:'Post not found'})
@@ -104,7 +104,10 @@ router.delete('/:id', auth, async(req,res)=>{
 
         }
         
-
+        //remove all comments connected to this post;
+        post.comments.forEach(comment=>{
+            await Comment.findByIdAndDelete(comment.id);
+        });
         await post.remove()
 
         res.json({msg: 'post removed'})
@@ -206,16 +209,22 @@ router.post('/comment/:id',[auth, [
         const user= await User.findById(req.user.id).select('-password');
         const post=await Post.findById(req.params.id);
 
-        const newComment={
+        //check if the post exists
+        if(!post){
+            res.status(400).json({msg: "post doesnt exist!"});
+        }
+        //make new comment
+        const newComment=new Comment({
             text: req.body.text,
             name: user.name,
             avatar: user.avatar,
             user: req.user.id
-        }
-
-        post.comments.unshift(newComment);
+        });
+        //save the commemt
+        const comment=await newComment.save();
+        post.comments.unshift(comment);
         await post.save();
-        res.json(post.comments);
+        res.json(post);//what do i return?
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -232,8 +241,12 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         const post=await Post.findById(req.params.id);
 
         //find the required comment
-        const comment=post.comments.find(comment=>comment.id===req.params.comment_id);
+        const comment=await Comment.findById(req.params.comment_id);
 
+        //check if the post exists
+        if(!post){
+            res.status(400).json({msg: "post doesnt exist!"});
+        }
         //make sure comment exist
         if(!comment){
             return res.status(404).json({msg: "comment doesnt exist!"});
@@ -245,12 +258,16 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         }
 
         //get remove index
-        const removeIndex=post.comments.map(comment => comment.id).indexOf(req.params.comment_id);
-        //remove that like
+        const removeIndex=post.comments.map(commentId => commentId.toString()).indexOf(req.params.comment_id);
+        if(removeIndex<0){
+            return res.status(404).json({msg: "comment doesnt exist!"});
+        }
+        //remove that comment
         post.comments.splice(removeIndex, 1);
 
         await post.save();
-        res.json(post.comments);
+        await comment.remove();
+        res.json(post);//what to return?
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -273,11 +290,17 @@ router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
         }
 
         //find the required comment
-        const comment=post.comments.find(comment=>comment.id===req.params.comment_id);
+        const comment=await Comment.findById(req.params.comment_id);
 
         //make sure the comment exists
         if(!comment){
             return res.status(404).json({msg:'Comment does not exist'})
+        }
+
+        //check if comment belongs to the post
+        const Index=post.comments.map(commentId => commentId.toString()).indexOf(req.params.comment_id);
+        if(Index<0){
+            return res.status(404).json({msg: "comment doesnt exist!"});
         }
 
         //check if the comment has already been liked by user
@@ -291,10 +314,9 @@ router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
             const removeIndex = comment.unlikes.map( unlike => unlike.user.toString()).indexOf(req.user.id)
             comment.unlikes.splice(removeIndex, 1)
         }
+        await comment.save();
 
-        await post.save()
-
-        res.json(comment.likes)
+        res.json(comment.likes);
         
     } catch (err) {
         console.error(err.message)
@@ -318,11 +340,17 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
         }
 
         //find the required comment
-        const comment=post.comments.find(comment=>comment.id===req.params.comment_id);
+        const comment=await Comment.findById(req.params.comment_id);
 
         //make sure the comment exists
         if(!comment){
             return res.status(404).json({msg:'Comment does not exist'})
+        }
+
+        //check if comment belongs to the post
+        const Index=post.comments.map(commentId => commentId.toString()).indexOf(req.params.comment_id);
+        if(Index<0){
+            return res.status(404).json({msg: "comment doesnt exist!"});
         }
 
         //check if the comment has already been unliked by user
@@ -336,8 +364,7 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
             const removeIndex = comment.likes.map( like => like.user.toString()).indexOf(req.user.id)
             comment.likes.splice(removeIndex, 1)
         }
-
-        await post.save()
+        await comment.save();
 
         res.json(comment.unlikes)
         
