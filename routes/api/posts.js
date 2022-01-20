@@ -257,4 +257,98 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
     }
 });
 
+
+
+//@route PUT api/posts/comment/like/:id/:comment_id
+//desc   like a comment on a post
+//access  private
+router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
+    try {
+        //find the post
+        const post = await Post.findById(req.params.id)
+
+        //make sure the post exists
+        if(!post){
+         return res.status(404).json({msg:'Post not found'})
+        }
+
+        //find the required comment
+        const comment=post.comments.find(comment=>comment.id===req.params.comment_id);
+
+        //make sure the comment exists
+        if(!comment){
+            return res.status(404).json({msg:'Comment does not exist'})
+        }
+
+        //check if the comment has already been liked by user
+        if(comment.likes.filter(like => like.user.toString()===req.user.id).length > 0){
+            return res.status(400).json({ msg: 'comment already liked'})
+        }
+
+        comment.likes.unshift({user: req.user.id})
+
+        if(comment.unlikes.filter(unlike => unlike.user.toString()===req.user.id).length > 0){
+            const removeIndex = comment.unlikes.map( unlike => unlike.user.toString()).indexOf(req.user.id)
+            comment.unlikes.splice(removeIndex, 1)
+        }
+
+        await post.save()
+
+        res.json(comment.likes)
+        
+    } catch (err) {
+        console.error(err.message)
+        if(err.kind === 'ObjectId')
+            return res.status(404).json({msg:'Comment does not exist'})
+        res.status(500).send('server error')
+    }
+})
+
+//@route PUT api/posts/comment/unlike/:id/:comment_id
+//desc   unlike a comment on a post
+//access  private
+router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
+    try {
+        //find the post
+        const post = await Post.findById(req.params.id)
+
+        //make sure the post exists
+        if(!post){
+         return res.status(404).json({msg:'Post not found'})
+        }
+
+        //find the required comment
+        const comment=post.comments.find(comment=>comment.id===req.params.comment_id);
+
+        //make sure the comment exists
+        if(!comment){
+            return res.status(404).json({msg:'Comment does not exist'})
+        }
+
+        //check if the comment has already been unliked by user
+        if(comment.unlikes.filter(unlike => unlike.user.toString()===req.user.id).length > 0){
+            return res.status(400).json({ msg: 'comment already unliked'})
+        }
+
+        comment.unlikes.unshift({user: req.user.id})
+
+        if(comment.likes.filter(like => like.user.toString()===req.user.id).length > 0){
+            const removeIndex = comment.likes.map( like => like.user.toString()).indexOf(req.user.id)
+            comment.likes.splice(removeIndex, 1)
+        }
+
+        await post.save()
+
+        res.json(comment.likes)
+        
+    } catch (err) {
+        console.error(err.message)
+        if(err.kind === 'ObjectId')
+            return res.status(404).json({msg:'Comment does not exist'})
+        res.status(500).send('server error')
+    }
+})
+
+
+
 module.exports = router
