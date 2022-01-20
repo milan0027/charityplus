@@ -339,7 +339,7 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
 
         await post.save()
 
-        res.json(comment.likes)
+        res.json(comment.unlikes)
         
     } catch (err) {
         console.error(err.message)
