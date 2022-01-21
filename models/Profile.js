@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const ProfileShcema = new Schema({
       user: {
         type:Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'User'
       },
       handle: {
         type: String,
@@ -23,11 +23,13 @@ const ProfileShcema = new Schema({
     },
 
       //for user
-    contributions:{
-        type: Array,
-        ref:'contributions'
+    contributions:[
+      {
+        type: Schema.Types.ObjectId,
+        ref:'Comment'
 
-    },
+      }
+  ],
     following: {
         type: [String]
     },

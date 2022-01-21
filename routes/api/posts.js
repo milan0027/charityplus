@@ -105,7 +105,7 @@ router.delete('/:id', auth, async(req,res)=>{
         }
         
         //remove all comments connected to this post;
-        post.comments.forEach(comment=>{
+        post.comments.forEach(async(comment)=>{
             await Comment.findByIdAndDelete(comment.id);
         });
         await post.remove()
