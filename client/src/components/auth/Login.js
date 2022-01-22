@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-export const Login = () => {
+//import axios from 'axios'
+import Alert from '../layout/alert';
+const Login = () => {
   const [formData, setFormData] = useState({
     email:'',
     password:''
@@ -25,6 +26,7 @@ export const Login = () => {
   return (
   <Fragment>
       <section className='container'>
+      <Alert/>
        <h1 className="large text-primary">Sign In</h1>
       <p className="lead"><i className="fas fa-user"></i> Sign In to Your Account</p>
       <form className="form" onSubmit={e => onSubmit(e)}>
@@ -58,3 +60,5 @@ export const Login = () => {
   </Fragment>
   );
 };
+
+export default Login
