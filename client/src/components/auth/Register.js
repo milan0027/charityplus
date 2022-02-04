@@ -1,14 +1,15 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 //import axios from "axios";
 import { Label, FormGroup, Input } from "reactstrap";
 import { connect } from 'react-redux'
+import { register } from '../../actions/auth'
 import { setAlert } from '../../actions/alert'
 import PropTypes from 'prop-types';
 import Alert from '../layout/alert';
 
 
-const Register = ({setAlert}) => {
+const Register = ({setAlert, register, isAuthenticated}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,6 +17,8 @@ const Register = ({setAlert}) => {
     password2: "",
     type_of: "false"
   });
+
+
 
   const { name, email,type_of, password, password2 } = formData;
   const onChange = (e) =>
@@ -48,9 +51,14 @@ const Register = ({setAlert}) => {
       //   console.error(err.response.data)
 
       // }
-      console.log(formData);
+      console.log(formData)
+      register({ name, email,type_of, password})
     }
   };
+
+  if(isAuthenticated) {
+    return <Navigate to="/dashboard"/>
+  }
 
   return (
     <Fragment>
@@ -129,7 +137,15 @@ const Register = ({setAlert}) => {
 
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 }
 
-export default connect(null, { setAlert })(Register)
+//state refers to reducer functions
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, 
+    { setAlert, register })(Register)

@@ -11,6 +11,9 @@ const ProfileShcema = new Schema({
         unique: true,
         max: 40
       },
+      website: {
+        type: String
+      },
       location: {
         type: String
       },
