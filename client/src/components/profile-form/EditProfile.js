@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { createProfile } from '../../actions/profile'
+import { createProfile, getCurrentProfile } from '../../actions/profile'
 import Alert from '../layout/alert';
 import Spinner from '../layout/Spinner';
-const CreateProfile = ({  createProfile, auth: {user, loading} , profile: { request_profile} }) => {
+const EditProfile = ({  createProfile , profile: {profile, loading, request_profile}, getCurrentProfile }) => {
  const navigate = useNavigate()
   const [formData, setFormData] = useState({
       handle:'',
@@ -38,9 +38,23 @@ const onChange = e => setFormData({...formData, [e.target.name]: e.target.value}
 const onSubmit = async (e) => {
   e.preventDefault();
 
-  createProfile(formData);
+  createProfile(formData, true);
 };
+useEffect(() => {
+    getCurrentProfile()
 
+      setFormData({
+        handle: loading || !profile.handle ? "":profile.handle,
+        website:loading || !profile.website  ? "": profile.website,
+        location:loading || !profile.location  ? "": profile.location,
+        bio: loading || !profile.bio  ?"": profile.bio,
+        twitter: loading || !profile.social  ?"": profile.social.twitter,
+        facebook:loading || !profile.social  ? "": profile.social.facebook,
+        linkedin: loading || !profile.social  ?"": profile.social.linkedin,
+        instagram: loading || !profile.social  ?"": profile.social.instagram,
+
+      })
+  }, [loading]);
 useEffect(() => {
   
   if (request_profile) {
@@ -50,9 +64,9 @@ useEffect(() => {
  
  return (<Fragment>
     <section className='container'>
-   {loading && !user ? <Spinner/>:
+   {loading && !profile ? <Spinner/>:
     <><h1 className="large text-primary">
-        Create Your Profile
+        Edit Your Profile
       </h1>
       <p className="lead">
         <i className="fas fa-user"></i> Let's get some information to make your
@@ -72,7 +86,7 @@ useEffect(() => {
           value={location} onChange={e=> onChange(e)} />
           <small className="form-text">City & state suggested (eg. Boston, MA)</small>
         </div>
-        { user.type_of &&  (<div className='form-group'>
+        { profile.type_of &&  (<div className='form-group'>
             <input
               type='text'
               placeholder='Website'
@@ -135,16 +149,17 @@ useEffect(() => {
 };
 
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
+ 
 };
 
 const mapStateToProps = state => ({
   profile: state.profile,
-  auth: state.auth
+ 
  
 })
 
-export default connect(mapStateToProps, { createProfile })(CreateProfile);
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(EditProfile);

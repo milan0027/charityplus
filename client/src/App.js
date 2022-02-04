@@ -13,6 +13,7 @@ import store from './store'
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
 import CreateProfile from './components/profile-form/CreateProfile';
+import EditProfile from './components/profile-form/EditProfile';
 if(localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -36,6 +37,9 @@ return(
         </PrivateRoute>} />
         <Route path='/create-profile' element={<PrivateRoute>
           <CreateProfile/>
+        </PrivateRoute>} />
+        <Route path='/edit-profile' element={<PrivateRoute>
+          <EditProfile/>
         </PrivateRoute>} />
       </Routes>
     </Fragment>

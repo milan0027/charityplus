@@ -9,7 +9,7 @@ const initialState = {
     request_profile: false   
 }
 
-export default function(state=initialState, action) {
+function profile(state=initialState, action) {
     const { type, payload} = action
 
     switch(type) {
@@ -45,3 +45,5 @@ export default function(state=initialState, action) {
 
     }
 }
+
+export default profile

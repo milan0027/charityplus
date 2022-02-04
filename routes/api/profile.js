@@ -1,5 +1,4 @@
 const express = require("express")
-
 const router = express.Router()
 const { validationResult,check}= require('express-validator')
 const auth = require('../../middleware/auth')
@@ -77,7 +76,13 @@ router.post('/',[auth,[
         
         
         try{
+            let duplicate = await Profile.findOne({handle: handle})
+           
             let profile = await Profile.findOne({ user: req.user.id})
+            if(duplicate && ((!profile)||(duplicate.handle !== profile.handle) ))
+            {
+                return res.status(400).json({ errors: [{'msg':'Handle already exists'}] })
+            }
     
             if(profile){
                 //update profile
