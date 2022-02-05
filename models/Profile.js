@@ -33,19 +33,27 @@ const ProfileShcema = new Schema({
 
       }
   ],
-    following: {
-        type: [String]
-    },
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:'User'
+      }
+    ],
     //for user
 
     //for organization
-    followers: {
-      type: Array
-    },
-    posts:{
-      type: Array,
-
-    },
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:'User'
+      }
+    ],
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:'Post'
+      }
+    ],
     //for organization
     social: {
        

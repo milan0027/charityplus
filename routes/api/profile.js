@@ -60,9 +60,9 @@ router.post('/',[auth,[
         const profileFields = {}
         profileFields.user = req.user.id
 
-        
+        const user=await User.findById(req.user.id);
         //incase of error find user and then give type_of to profileField
-        profileFields.type_of = req.user.type_of
+        if(user) profileFields.type_of = user.type_of
         
         if(location) profileFields.location = location
         if(bio) profileFields.bio = bio
@@ -116,7 +116,7 @@ router.get('/user', async (req, res)=>{
 
         const profiles = await Profile.find({type_of: false}).populate(
             'user',
-            ['name','avatar']
+            ['name','avatar','rating']
         )
 
         res.json(profiles)
@@ -136,7 +136,7 @@ router.get('/user/:user_id', async (req, res)=>{
 
         const profile = await Profile.findOne({user: req.params.user_id, type_of:false}).populate(
             'user',
-            ['name','avatar']
+            ['name','avatar','rating']
         )
         if(!profile)
         return res.status(400).json({msg: 'profile not found'})
@@ -161,7 +161,7 @@ router.get('/organization', async (req, res)=>{
 
         const profiles = await Profile.find({type_of:true}).populate(
             'user',
-            ['name','avatar']
+            ['name','avatar','rating']
         )
 
         res.json(profiles)
@@ -181,7 +181,7 @@ router.get('/organization/:user_id', async (req, res)=>{
 
         const profile = await Profile.findOne({user: req.params.user_id, type_of: true}).populate(
             'user',
-            ['name','avatar']
+            ['name','avatar','rating']
         )
         return res.status(400).json({msg: 'profile not found'})
 
