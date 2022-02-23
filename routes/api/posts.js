@@ -134,7 +134,10 @@ router.put('/like/:id',auth, async (req, res) => {
 
         //check if the post has already been liked by user
         if(post.likes.filter(like => like.user.toString()===req.user.id).length > 0){
-            return res.status(400).json({ msg: 'post already liked'})
+            const removeIndex = post.likes.map( like => like.user.toString()).indexOf(req.user.id)
+            post.likes.splice(removeIndex, 1)
+            await post.save()
+            return res.json({likes: post.likes, unlikes: post.unlikes})
         }
 
         post.likes.unshift({user: req.user.id})
@@ -148,7 +151,7 @@ router.put('/like/:id',auth, async (req, res) => {
 
         await post.save()
 
-        res.json(post.likes)
+        res.json({likes: post.likes, unlikes: post.unlikes})
         
     } catch (err) {
         console.error(err.message)
@@ -170,7 +173,10 @@ router.put('/unlike/:id',auth, async (req, res) => {
 
         //check if the post has already been unliked by user
         if(post.unlikes.filter(unlike => unlike.user.toString()===req.user.id).length > 0){
-            return res.status(400).json({ msg: 'post already unliked'})
+            const removeIndex = post.unlikes.map( unlike => unlike.user.toString()).indexOf(req.user.id)
+            post.unlikes.splice(removeIndex, 1)
+            await post.save()
+            return res.json({likes: post.likes, unlikes: post.unlikes})
         }
 
         post.unlikes.unshift({user: req.user.id})
@@ -184,7 +190,7 @@ router.put('/unlike/:id',auth, async (req, res) => {
 
         await post.save()
 
-        res.json(post.unlikes)
+        res.json({likes: post.likes, unlikes: post.unlikes})
         
     } catch (err) {
         console.error(err.message)
@@ -224,7 +230,7 @@ router.post('/comment/:id',[auth, [
         const comment=await newComment.save();
         post.comments.unshift(comment);
         await post.save();
-        res.json(post);//what do i return?
+        res.json(post);//what do i return?kuch noi krenge
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -305,7 +311,11 @@ router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
 
         //check if the comment has already been liked by user
         if(comment.likes.filter(like => like.user.toString()===req.user.id).length > 0){
-            return res.status(400).json({ msg: 'comment already liked'})
+            const removeIndex = comment.likes.map( like => like.user.toString()).indexOf(req.user.id)
+            comment.likes.splice(removeIndex, 1)
+            await comment.save();
+
+            return res.json(comment.likes);
         }
 
         comment.likes.unshift({user: req.user.id})
@@ -355,7 +365,11 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
 
         //check if the comment has already been unliked by user
         if(comment.unlikes.filter(unlike => unlike.user.toString()===req.user.id).length > 0){
-            return res.status(400).json({ msg: 'comment already unliked'})
+            const removeIndex = comment.unlikes.map( unlike => unlike.user.toString()).indexOf(req.user.id)
+            comment.unlikes.splice(removeIndex, 1)
+            await comment.save();
+
+            return res.json(comment.unlikes)
         }
 
         comment.unlikes.unshift({user: req.user.id})

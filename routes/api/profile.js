@@ -183,6 +183,7 @@ router.get('/organization/:user_id', async (req, res)=>{
             'user',
             ['name','avatar','rating']
         )
+        if(!profile)
         return res.status(400).json({msg: 'profile not found'})
 
         res.json(profile)

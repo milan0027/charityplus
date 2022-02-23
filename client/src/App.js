@@ -16,6 +16,11 @@ import CreateProfile from './components/profile-form/CreateProfile';
 import EditProfile from './components/profile-form/EditProfile';
 import UserProfiles from './components/profiles/UserProfiles';
 import OrganizationProfiles from './components/profiles/OrganizationProfiles';
+import UserProfile from './components/profile/UserProfile';
+import OrganizationProfile from './components/profile/OrganizationProfile';
+import Posts from "./components/posts/Posts";
+import Post from "./components/post/Post";
+import NotFound from './components/layout/NotFound';
 if(localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -36,6 +41,8 @@ return(
         <Route path="/login" element={<Login />} />
         <Route path="/userprofiles" element={<UserProfiles />} />
         <Route path="/organizationprofiles" element={<OrganizationProfiles />} />
+        <Route path='/profile/user/:id' element={<UserProfile/>} />
+         <Route path='/profile/organization/:id' element={<OrganizationProfile/>} />
         <Route path='/dashboard' element={<PrivateRoute>
           <Dashboard/>
         </PrivateRoute>} />
@@ -45,6 +52,24 @@ return(
         <Route path='/edit-profile' element={<PrivateRoute>
           <EditProfile/>
         </PrivateRoute>} />
+        <Route
+              path='/posts'
+              element={
+                <PrivateRoute>
+                  <Posts/>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/posts/:id'
+              element={
+                <PrivateRoute>
+                  <Post />
+                </PrivateRoute>
+              }
+            />
+
+            <Route path='*' element={<NotFound/>} />
       </Routes>
     </Fragment>
   </Router>

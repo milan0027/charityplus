@@ -5,7 +5,7 @@ const initialState = {
     profiles: [],
     repos: [],
     loading: true,
-    error: {},
+    error: null,
     request_profile: false   
 }
 
@@ -19,13 +19,15 @@ function profile(state=initialState, action) {
                 ...state,
                 profile: payload,
                 loading: false,
-                request_profile: false
+                request_profile: false,
+                error: null
             }
         case GET_PROFILES:
             return {
                 ...state,
                 profiles:payload,
-                loading:false
+                loading:false,
+                error: null
             }
         case PROFILE_ERROR:
             return {
