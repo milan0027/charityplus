@@ -213,7 +213,7 @@ router.post('/comment/:id',[auth, [
 
     try{
         const user= await User.findById(req.user.id).select('-password');
-        const post=await Post.findById(req.params.id);
+        const post=await Post.findById(req.params.id).populate('comments');
 
         //check if the post exists
         if(!post){
@@ -230,7 +230,7 @@ router.post('/comment/:id',[auth, [
         const comment=await newComment.save();
         post.comments.unshift(comment);
         await post.save();
-        res.json(post);//what do i return?kuch noi krenge
+        res.json(post);//what do i return again solly
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -273,7 +273,7 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
 
         await post.save();
         await comment.remove();
-        res.json(post);//what to return?
+        res.json(post.comments);//what to return? krdia ab solly
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -315,7 +315,7 @@ router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
             comment.likes.splice(removeIndex, 1)
             await comment.save();
 
-            return res.json(comment.likes);
+            return res.json(comment);
         }
 
         comment.likes.unshift({user: req.user.id})
@@ -326,7 +326,7 @@ router.put('/comment/like/:id/:comment_id',auth, async (req, res) => {
         }
         await comment.save();
 
-        res.json(comment.likes);
+        res.json(comment);
         
     } catch (err) {
         console.error(err.message)
@@ -369,7 +369,7 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
             comment.unlikes.splice(removeIndex, 1)
             await comment.save();
 
-            return res.json(comment.unlikes)
+            return res.json(comment)
         }
 
         comment.unlikes.unshift({user: req.user.id})
@@ -380,7 +380,7 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
         }
         await comment.save();
 
-        res.json(comment.unlikes)
+        res.json(comment)
         
     } catch (err) {
         console.error(err.message)

@@ -9,7 +9,9 @@ import {
     UPDATE_UNLIKES,
     GET_POST,
     ADD_COMMENT,
-    REMOVE_COMMENT
+    REMOVE_COMMENT,
+    UPDATE_COMMENT_LIKES,
+    UPDATE_COMMENT_UNLIKES
 } from './types'
 
 // get posts 
@@ -113,6 +115,11 @@ export const addPost = formData => async dispatch => {
         dispatch(setAlert('Post Added', 'success'))
         
     } catch (err) {
+        const errors = err.response.data.errors
+
+        if(errors) {
+            errors.forEach(error => dispatch( setAlert(error.msg, 'danger')))
+        }
         dispatch({
             type: POST_ERROR,
             payload: { msg: err.response.statusText, status: err.response.status }
@@ -151,7 +158,7 @@ export const addComment = (postId, formData) => async dispatch => {
 
         dispatch({
             type: ADD_COMMENT,
-            payload: res.data
+            payload: res.data.comments
         })
 
         dispatch(setAlert('Comment Added', 'success'))
@@ -181,6 +188,51 @@ export const deleteComment = (postId, commentId) => async dispatch => {
         })
 
         dispatch(setAlert('Comment Removed', 'success'))
+        
+    } catch (err) {
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+
+// add Comment like 
+export const addCommentLike = (postId, commentId) => async dispatch => {
+    try {
+        const res = await axios.put(`/api/posts/comment/like/${postId}/${commentId}`)
+
+        dispatch({
+            type: UPDATE_COMMENT_LIKES,
+            payload: { id: commentId, likes: res.data.likes }
+        })
+        dispatch({
+            type: UPDATE_COMMENT_UNLIKES,
+            payload: { id: commentId, unlikes: res.data.unlikes }
+        })
+        
+    } catch (err) {
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+// remove Comment like 
+export const removeCommentLike = (postId, commentId) => async dispatch => {
+    try {
+        const res = await axios.put(`/api/posts/comment/unlike/${postId}/${commentId}`) //again sollllyyyy
+
+        dispatch({
+            type: UPDATE_COMMENT_LIKES,
+            payload: { id: commentId, likes: res.data.likes }
+        })
+        dispatch({
+            type: UPDATE_COMMENT_UNLIKES,
+            payload: { id: commentId, unlikes: res.data.unlikes }
+        })
         
     } catch (err) {
         dispatch({
