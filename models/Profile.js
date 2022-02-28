@@ -28,8 +28,11 @@ const ProfileShcema = new Schema({
       //for user
     contributions:[
       {
-        type: Schema.Types.ObjectId,
-        ref:'Comment'
+        comment: {
+          type: Schema.Types.ObjectId,
+          ref:'Comment'
+        }
+        
 
       }
   ],
@@ -54,8 +57,11 @@ const ProfileShcema = new Schema({
     ],
     posts: [
       {
-        type: Schema.Types.ObjectId,
-        ref:'Post'
+        post: {
+          type: Schema.Types.ObjectId,
+          ref:'Post'
+        }
+       
       }
     ],
     //for organization

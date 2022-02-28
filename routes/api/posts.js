@@ -34,7 +34,7 @@ router.post('/',[ auth, [
             image: req.body.text
         })
 
-        organization.posts.unshift(newPost);
+        organization.posts.unshift({ post: newPost._id});
         const post = await newPost.save()
 
         await organization.save();
@@ -98,6 +98,7 @@ router.get('/:id', auth, async(req,res)=>{
 router.delete('/:id', auth, async(req,res)=>{
 
     try {
+        const profile = await Profile.findOne({user: req.user.id});
         const post = await Post.findById(req.params.id)
 
         if(!post)
@@ -112,8 +113,15 @@ router.delete('/:id', auth, async(req,res)=>{
         post.comments.forEach(async(comment)=>{
             await Comment.findByIdAndDelete(comment.id);
         });
+        if(profile.posts.filter( post => post.post.toString()===req.params.id) > 0){
+            const removeIndex = profile.posts.map( post => post.post.toString()).indexOf(req.params.id)
+            profile.posts.splice(removeIndex, 1)
+            await profile.save()
+        }
+
         await post.remove()
 
+        
         res.json({msg: 'post removed'})
         
     } catch (err) {
@@ -234,7 +242,7 @@ router.post('/comment/:id',[auth, [
         //save the commemt
         const comment=await newComment.save();
         post.comments.unshift(comment);
-        userProfile.contributions.unshift(comment);
+        userProfile.contributions.unshift({comment: comment._id});
         await userProfile.save();
         await post.save();
         res.json(post);//what do i return again solly
@@ -250,6 +258,9 @@ router.post('/comment/:id',[auth, [
 // @access  Private
 router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
     try{
+        //find the user
+        const profile = await Profile.findOne({ user: req.user.id});
+
         //find the post
         const post=await Post.findById(req.params.id);
 
@@ -277,9 +288,14 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         }
         //remove that comment
         post.comments.splice(removeIndex, 1);
+        if(profile.contributions.filter(comment => comment.comment.toString() === req.params.comment_id) > 0){
+            const removalIndex = profile.contributions.map(comment => comment.comment.toString()).indexOf(req.params.comment_id)
+            profile.contributions.splice(removalIndex, 1)
+        }
 
         await post.save();
         await comment.remove();
+        await profile.save();
         res.json(post.comments);//what to return? krdia ab solly
     }catch(e){
         console.log(e.message);
