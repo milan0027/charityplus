@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-
+import Alert from '../layout/alert';
 const OrganizationProfileItem = ({ profile:{ 
     user:{ _id, name, avatar ,rating},
     handle,

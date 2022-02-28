@@ -6,7 +6,8 @@ import {
     PROFILE_ERROR,
     REQUEST_PROFILE,
     GET_PROFILES,
-    CLEAR_PROFILE
+    CLEAR_PROFILE,
+    ADD_FOLLOW
 } from './types'
 
 //get current users profile
@@ -139,3 +140,20 @@ export const createProfile = (formData,edit = false) => async dispatch => {
         })
     }
 } 
+
+//follow an organization
+export const follow = id =>async dispatch => {
+    try{
+        const res= await axios.post(`/api/profile/follow/${id}`);
+        dispatch({
+            type: ADD_FOLLOW,
+            payload: res.data
+        });
+        dispatch(setAlert((res.data.state ? 'followed successfully' : 'unfollowed successfully'),'success'));
+    }catch(e){
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: e.response.statusText, status: e.response.status}
+        });
+    }
+}

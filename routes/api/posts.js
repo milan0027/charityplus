@@ -22,6 +22,7 @@ router.post('/',[ auth, [
 
     try {
         const user = await User.findById(req.user.id).select('-password')
+        const organization= await Profile.findOne({user: req.user.id});
         if(!user.type_of)
         return res.status(400).json({ errors: [{"msg": "you are not allowed to post"}]})
 
@@ -33,7 +34,10 @@ router.post('/',[ auth, [
             image: req.body.text
         })
 
+        organization.posts.unshift(newPost);
         const post = await newPost.save()
+
+        await organization.save();
 
         res.json(post)
         
@@ -213,6 +217,7 @@ router.post('/comment/:id',[auth, [
 
     try{
         const user= await User.findById(req.user.id).select('-password');
+        const userProfile= await Profile.findOne({user: req.user.id});
         const post=await Post.findById(req.params.id).populate('comments');
 
         //check if the post exists
@@ -229,6 +234,8 @@ router.post('/comment/:id',[auth, [
         //save the commemt
         const comment=await newComment.save();
         post.comments.unshift(comment);
+        userProfile.contributions.unshift(comment);
+        await userProfile.save();
         await post.save();
         res.json(post);//what do i return again solly
     }catch(e){

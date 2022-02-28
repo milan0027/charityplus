@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
 import OrganizationProfileTop from "./OrganizationProfileTop";
-import { getOrganizationProfileById } from "../../actions/profile";
+import { getOrganizationProfileById, follow } from "../../actions/profile";
 import { Link, useParams } from "react-router-dom";
 import OrganizationProfileAbout from "./OrganizationProfileAbout";
 import NotFound from "../layout/NotFound";
-const OrganizationProfile = ({ getOrganizationProfileById, profile: { profile, loading, error }, auth }) => {
+import Alert from "../layout/alert";
+const OrganizationProfile = ({follow, getOrganizationProfileById, profile: { profile, loading, error }, auth }) => {
   let { id } = useParams();
   useEffect(() => {
     getOrganizationProfileById(id);
@@ -16,6 +17,7 @@ const OrganizationProfile = ({ getOrganizationProfileById, profile: { profile, l
   return (
     <Fragment>
       <section className='container'>
+        <Alert/>
         {loading || profile===null ? ( error === null? <Spinner/>:<NotFound/>) :  ( 
           <Fragment>
             <Link to='/OrganizationProfiles' className='btn btn-light'>
@@ -28,6 +30,9 @@ const OrganizationProfile = ({ getOrganizationProfileById, profile: { profile, l
                   Edit Profile
                 </Link>
               )}
+            <button onClick={e => follow(id)} className='btn btn-primary'>
+              Follow
+            </button>
             <div className='profile-grid my-1'>
               <OrganizationProfileTop profile={profile} />
               <OrganizationProfileAbout profile={profile} />
@@ -43,6 +48,7 @@ OrganizationProfile.propTypes = {
   getOrganizationProfileById: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
+  follow: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -50,4 +56,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getOrganizationProfileById })(OrganizationProfile);
+export default connect(mapStateToProps, { getOrganizationProfileById, follow })(OrganizationProfile);

@@ -217,4 +217,36 @@ router.delete('/',auth,async(req,res)=>{
     }
 });
 
+//follow
+router.post('/follow/:id',auth,async(req,res)=>{
+    try{
+        const user = await Profile.findOne({user: req.user.id}).populate('following');
+        const organization= await Profile.findOne({user: req.params.id}).populate('followers');
+        console.log(req.user.id);
+        console.log(organization);
+        if(user.type_of || !organization.type_of){
+            return res.status(400).json({ msg: "action not allowed"});
+        }
+
+        if(user.following.filter(follow => follow.user.toString()===req.params.id).length > 0){
+            const removeIndexUser= user.following.map(follow => follow.user.toString()).indexOf(req.params.id);
+            user.following.splice(removeIndexUser,1);
+            const removeIndexOrgan= organization.followers.map(follow => follow.user.toString()).indexOf(req.user.id);
+            organization.followers.splice(removeIndexOrgan,1);
+            await user.save();
+            await organization.save();
+            console.log({followers:organization.followers, following:user.following, state:0 });
+            return res.json({followers:organization.followers, following:user.following,state:0 });
+        }
+        user.following.unshift(organization);
+        organization.followers.unshift(user);
+        await user.save();
+        await organization.save();
+        console.log({followers:organization.followers, following:user.following, state:1 });
+        return res.json({followers:organization.followers, following:user.following, state:1 });
+    }catch(e){
+        console.log(e.message);
+        res.status(500).send('server error')
+    }
+})
 module.exports = router

@@ -35,8 +35,10 @@ const ProfileShcema = new Schema({
   ],
     following: [
       {
-        type: Schema.Types.ObjectId,
-        ref:'User'
+        user:{
+          type: Schema.Types.ObjectId,
+          ref:'User'
+        }
       }
     ],
     //for user
@@ -44,8 +46,10 @@ const ProfileShcema = new Schema({
     //for organization
     followers: [
       {
-        type: Schema.Types.ObjectId,
-        ref:'User'
+        user:{
+          type: Schema.Types.ObjectId,
+          ref:'User'
+        }
       }
     ],
     posts: [
