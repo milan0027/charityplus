@@ -33,7 +33,13 @@ ul {
 img {
   width: 100%;
 }
+.primary{
+  color: #0077b5;
+}
 
+.danger{
+  color: #c4302b;
+}
 /* Utilities */
 .container {
   max-width: 1100px;

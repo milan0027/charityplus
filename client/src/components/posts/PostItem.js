@@ -27,14 +27,15 @@ const PostItem = ({
         </p>
 
         { showActions && (<>
-            <button onClick={e => addLike(_id)} type='button' className='btn btn-light'>
-          <i className='fas fa-thumbs-up'></i>{' '}
+            <button onClick={e => addLike(_id)} type='button' className= {!auth.loading && likes.filter(like => like.user.toString()===auth.user._id).length > 0?'btn btn-primary':'btn btn-light'}>
+            <i className='fas fa-thumbs-up'></i> {' '}
           {likes.length > 0 && (
                  <span>{likes.length}</span>
           )}
          
         </button>
-        <button onClick={e => removeLike(_id)} type='button' className='btn btn-light'>
+        <button onClick={e => removeLike(_id)} type='button' className= {!auth.loading && unlikes.filter(unlike => unlike.user.toString()===auth.user._id).length > 0?'btn btn-danger':'btn btn-light'} >
+         
           <i className='fas fa-thumbs-down'></i>{' '}
           {unlikes.length > 0 && (
                  <span>{unlikes.length}</span>

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types'
 
 
-const OrganizationProfileAbout = ({ profile: {
+const OrganizationProfileTop = ({ profile: {
     
     location,
     website,
@@ -59,8 +59,8 @@ const OrganizationProfileAbout = ({ profile: {
     )
 }
 
-OrganizationProfileAbout.propTypes = {
+OrganizationProfileTop.propTypes = {
     profile: PropTypes.object.isRequired
 }
 
-export default OrganizationProfileAbout
+export default OrganizationProfileTop

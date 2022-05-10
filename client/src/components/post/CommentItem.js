@@ -26,14 +26,14 @@ const CommentItem = ({
         <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>
-        <button onClick={e => addCommentLike(postId, _id)} type='button' className='btn btn-light'>
+        <button onClick={e => addCommentLike(postId, _id)} type='button' className= {!auth.loading && likes.filter(like => like.user.toString()===auth.user._id).length > 0?'btn btn-primary':'btn btn-light'}>
           <i className='fas fa-thumbs-up'></i>{' '}
           {likes.length > 0 && (
                  <span>{likes.length}</span>
           )}
          
         </button>
-        <button onClick={e => removeCommentLike(postId, _id)} type='button' className='btn btn-light'>
+        <button onClick={e => removeCommentLike(postId, _id)} type='button' className= {!auth.loading && unlikes.filter(unlike => unlike.user.toString()===auth.user._id).length > 0?'btn btn-danger':'btn btn-light'}>
           <i className='fas fa-thumbs-down'></i>{' '}
           {unlikes.length > 0 && (
                  <span>{unlikes.length}</span>

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types'
 
-const UserProfileAbout = ({ profile: {
+const UserProfileTop = ({ profile: {
     
     location,
     website,
@@ -58,8 +58,8 @@ const UserProfileAbout = ({ profile: {
     )
 }
 
-UserProfileAbout.propTypes = {
+UserProfileTop.propTypes = {
     profile: PropTypes.object.isRequired
 }
 
-export default UserProfileAbout
+export default UserProfileTop
