@@ -277,7 +277,7 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         }
 
         //check if current user is owner of the comment
-        if(comment.user.toString() !== req.user.id){
+        if(comment.user.toString() !== req.user.id && req.user.id !== post.user.toString()){
             return res.status(401).json({msg: "user not authorized"}); 
         }
 
@@ -296,7 +296,7 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         await post.save();
         await comment.remove();
         await profile.save();
-        res.json(post.comments);//what to return? krdia ab solly
+        res.json({});//what to return? krdia ab solly
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -413,6 +413,50 @@ router.put('/comment/unlike/:id/:comment_id',auth, async (req, res) => {
     }
 })
 
+router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
+    try{
+        //find the post
+        const post = await Post.findById(req.params.id)
 
+        //make sure the post exists
+        if(!post){
+         return res.status(404).json({msg:'Post not found'})
+        }
+
+        //find the required comment
+        const comment=await Comment.findById(req.params.comment_id);
+
+        //make sure the comment exists
+        if(!comment){
+            return res.status(404).json({msg:'Comment does not exist'})
+        }
+
+         //check if current user is owner of the comment
+         if(req.user.id !== post.user.toString()){
+            return res.status(401).json({msg: "user not authorized"}); 
+        }
+
+        const user = await User.findById(comment.user.toString());
+        user.rating = user.rating + 5;
+
+         //get remove index
+         const approveIndex=post.comments.map(commentId => commentId.toString()).indexOf(req.params.comment_id);
+         if(approveIndex<0){
+             return res.status(404).json({msg: "comment doesnt exist!"});
+         }
+
+         comments.approval = true;
+         await user.save();
+         await comment.save();
+         await post.save();
+
+         res.json({});
+
+
+    }catch(e){
+        console.log(e.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 module.exports = router
