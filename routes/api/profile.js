@@ -132,7 +132,7 @@ router.get("/user/:user_id", async (req, res) => {
 //route get api/profile/organization
 //get all organisation profiles
 
-router.get("/organization", auth, async (req, res) => {
+router.get("/organization", async (req, res) => {
   try {
     const profiles = await Profile.find({ type_of: true }).populate("user", [
       "name",

@@ -425,7 +425,7 @@ router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
 
         //find the required comment
         const comment=await Comment.findById(req.params.comment_id);
-
+        // console.log(comment);
         //make sure the comment exists
         if(!comment){
             return res.status(404).json({msg:'Comment does not exist'})
@@ -445,7 +445,7 @@ router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
              return res.status(404).json({msg: "comment doesnt exist!"});
          }
 
-         comments.approval = true;
+         comment.approval = true;
          await user.save();
          await comment.save();
          await post.save();

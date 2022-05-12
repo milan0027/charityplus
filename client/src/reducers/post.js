@@ -9,7 +9,8 @@ import {
   ADD_COMMENT,
   REMOVE_COMMENT,
   UPDATE_COMMENT_LIKES,
-  UPDATE_COMMENT_UNLIKES
+  UPDATE_COMMENT_UNLIKES,
+  APPROVE_COMMENT
 } from "../actions/types";
 
 const initialState = {
@@ -121,6 +122,19 @@ function post(state = initialState, action) {
         loading: false,
         error: null,
       };
+    case APPROVE_COMMENT:
+      return {
+        ...state,
+        post:{
+          ...state.post,
+          comments: state.post.comments.map((comment)=>{
+            if(comment._id === payload) comment.approval=true;
+            return comment;
+          }),
+        },
+        loading:false,
+        error:null
+      }
     default:
       return state;
   }

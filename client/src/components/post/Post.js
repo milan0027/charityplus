@@ -16,6 +16,7 @@ const Post = ({ getPost, post: { post, loading }, profile: {profile, loading: pr
     getCurrentProfile()
   }, [getPost, id, getCurrentProfile, profileLoading]);
 
+  // console.log(profile);
   return (
     <>
       <section className='container'>
@@ -33,7 +34,7 @@ const Post = ({ getPost, post: { post, loading }, profile: {profile, loading: pr
               </div>
             <div className="comments">
                 {post.comments.map(comment => (
-                    <CommentItem key={comment._id} comment= {comment} postId={post._id}/>
+                    <CommentItem key={comment._id} comment= {comment} postId={post._id} organisationId={post.user.toString()}/>
                 ))}
             </div>
           </>

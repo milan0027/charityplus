@@ -11,7 +11,8 @@ import {
     ADD_COMMENT,
     REMOVE_COMMENT,
     UPDATE_COMMENT_LIKES,
-    UPDATE_COMMENT_UNLIKES
+    UPDATE_COMMENT_UNLIKES,
+    APPROVE_COMMENT
 } from './types'
 
 // get posts 
@@ -233,6 +234,32 @@ export const removeCommentLike = (postId, commentId) => async dispatch => {
             type: UPDATE_COMMENT_UNLIKES,
             payload: { id: commentId, unlikes: res.data.unlikes }
         })
+        
+    } catch (err) {
+        dispatch({
+            type: POST_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        })
+    }
+}
+
+// approve comment
+export const approveComment = (postId, commentId) => async dispatch => {
+    const config = {
+        header: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        await axios.put(`/api/posts/comment/approve/${postId}/${commentId}`, config)
+
+        dispatch({
+            type: APPROVE_COMMENT,
+            payload: commentId
+        })
+
+        dispatch(setAlert('Comment Removed', 'success'))
         
     } catch (err) {
         dispatch({
