@@ -8,7 +8,12 @@ import { Link, useParams } from "react-router-dom";
 import OrganizationProfileAbout from "./OrganizationProfileAbout";
 import NotFound from "../layout/NotFound";
 import Alert from "../layout/alert";
-const OrganizationProfile = ({follow, getOrganizationProfileById, profile: { profile, loading, error }, auth }) => {
+const OrganizationProfile = ({
+  follow,
+  getOrganizationProfileById,
+  profile: { profile, loading, error },
+  auth,
+}) => {
   let { id } = useParams();
   useEffect(() => {
     getOrganizationProfileById(id);
@@ -17,8 +22,14 @@ const OrganizationProfile = ({follow, getOrganizationProfileById, profile: { pro
   return (
     <Fragment>
       <section className='container'>
-        <Alert/>
-        {loading || profile===null ? ( error === null? <Spinner/>:<NotFound/>) :  ( 
+        <Alert />
+        {loading || profile === null ? (
+          error === null ? (
+            <Spinner />
+          ) : (
+            <NotFound />
+          )
+        ) : (
           <Fragment>
             <Link to='/OrganizationProfiles' className='btn btn-light'>
               Back To Profiles
@@ -30,8 +41,11 @@ const OrganizationProfile = ({follow, getOrganizationProfileById, profile: { pro
                   Edit Profile
                 </Link>
               )}
-            <button onClick={e => follow(id)} className='btn btn-primary'>
-              Follow
+            <button onClick={(e) => follow(id)} className='btn btn-primary'>
+              { auth.isAuthenticated &&
+              auth.loading === false && profile.followers.filter((item) => item.user.toString() ===  auth.user._id ).length > 0
+                ? "Unfollow"
+                : "Follow"}
             </button>
             <div className='profile-grid my-1'>
               <OrganizationProfileTop profile={profile} />
@@ -48,7 +62,7 @@ OrganizationProfile.propTypes = {
   getOrganizationProfileById: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  follow: PropTypes.func.isRequired
+  follow: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -56,4 +70,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getOrganizationProfileById, follow })(OrganizationProfile);
+export default connect(mapStateToProps, { getOrganizationProfileById, follow })(
+  OrganizationProfile
+);
