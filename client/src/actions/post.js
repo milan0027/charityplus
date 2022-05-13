@@ -259,7 +259,7 @@ export const approveComment = (postId, commentId) => async dispatch => {
             payload: commentId
         })
 
-        dispatch(setAlert('Comment Removed', 'success'))
+        dispatch(setAlert('Comment Approved', 'success'))
         
     } catch (err) {
         dispatch({

@@ -1,29 +1,37 @@
 import React from "react";
 import PropTypes from 'prop-types'
-
-
+import { follow } from "../../actions/profile";
+import { connect } from "react-redux";
 const OrganizationProfileTop = ({ profile: {
     
     location,
     website,
     social,
+    handle,
+    followers,
     user: {
         name,
-        avatar
+        avatar,
+        rating
     }
-}}) => {
+}, auth, follow, id}) => {
     return (
         <>
-        <div className="profile-top bg-primary p-2">
+        <div className="profile bg-primary p-2">
           <img
-            className="round-img my-1"
+            className="round-img"
             src={avatar}
             alt=""
           />
-          <h1 className="large">{ name }</h1>
+          <div>
+
+          
+         <h2>{name}</h2>
+          <h4>@{handle}</h4>
+          <h4><i class="fas fa-bolt"></i> {rating}</h4>
+          <h4 className='my-1'>{location && <span><i class="fa fa-map-marker" aria-hidden="true"></i> {location}</span>}</h4>
          
-          <p>{location && <span>{location}</span>}</p>
-          <div className="icons my-1">
+          <div className="icons">
               {
                   website && (
                     <a href={website} target="_blank" rel="noopener noreferrer">
@@ -54,13 +62,31 @@ const OrganizationProfileTop = ({ profile: {
             )}
             
           </div>
+          </div>
+          <div>
+          <button onClick={(e) => follow(id)} className='btn btn-dark' style={{ width: '160px'}}>
+              { auth.isAuthenticated &&
+              auth.loading === false && followers.filter((item) => item.user.toString() ===  auth.user._id ).length > 0
+                ? "Unfollow"
+                : "Follow"}
+            </button>
+            <button className='btn btn-dark my-1' style={{ width: '160px'}}>
+          Followers {followers.length > 0 && (
+                <span className='comment-count'>{followers.length}</span>
+          )}
+        </button>
+          </div>
         </div>
         </>
     )
 }
 
 OrganizationProfileTop.propTypes = {
-    profile: PropTypes.object.isRequired
+    profile: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    follow: PropTypes.func.isRequired,
 }
-
-export default OrganizationProfileTop
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps, {follow})( OrganizationProfileTop)

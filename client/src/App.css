@@ -390,18 +390,18 @@ button {
   width: 250px;
 }
 
-.profile-top .icons a {
+.profile .icons a {
   color: #fff;
   margin: 0 0.3rem;
 }
 
-.profile-top .icons a:hover {
+.profile .icons a:hover {
   color: var(--dark-color);
 }
 
 .profile-about {
   grid-area: about;
-  text-align: center;
+ 
 }
 
 .profile-about .skills {

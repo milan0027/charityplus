@@ -11,9 +11,11 @@ const OrganizationProfileAbout = ({
     <div className='profile-about bg-light p-2'>
       {bio && (
         <>
-          <h2 className='text-primary'>{name.trim().split(' ')[0]}'s Bio</h2>
-          <p>{bio}</p>
-          <div className='line'></div>
+         
+          <h2 className='text-primary'>About {name.trim().split(' ')[0]}</h2>
+          <hr></hr>
+          <h4>{bio}</h4>
+         
         </>
       )}
     </div>

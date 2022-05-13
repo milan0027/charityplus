@@ -142,7 +142,6 @@ export const createProfile = (formData,edit = false) => async dispatch => {
 
 //follow an organization
 export const follow = id =>async dispatch => {
-    dispatch({type: CLEAR_PROFILE });
     try{
         const res= await axios.post(`/api/profile/follow/${id}`);
         dispatch({

@@ -127,10 +127,8 @@ function post(state = initialState, action) {
         ...state,
         post:{
           ...state.post,
-          comments: state.post.comments.map((comment)=>{
-            if(comment._id === payload) comment.approval=true;
-            return comment;
-          }),
+          comments: state.post.comments.map((comment)=>
+            comment._id === payload ? {...comment, approval: true} : comment)
         },
         loading:false,
         error:null

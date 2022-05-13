@@ -186,7 +186,7 @@ router.delete("/", auth, async (req, res) => {
   }
 });
 
-//follow
+//follow an organization
 router.post("/follow/:id", auth, async (req, res) => {
    
   try {
@@ -197,7 +197,7 @@ router.post("/follow/:id", auth, async (req, res) => {
       user: req.params.id,
     }).populate("user", ["name", "avatar", "rating"]);
     //console.log(req.user.id);
-    console.log(organization);
+    //console.log(organization);
     if (user.type_of || !organization.type_of) {
       return res.status(400).json({ msg: "action not allowed" });
     }
