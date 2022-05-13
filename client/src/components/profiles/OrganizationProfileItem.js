@@ -9,16 +9,23 @@ const OrganizationProfileItem = ({ profile:{
     location
 },follow}) => {
   return <div className='profile bg-light'>
-      <img src={avatar} alt="" className='round-img'/>
+    <div>
+    <img src={avatar} alt="" className='round-img'/>
+    </div>
+    
       <div>
           <h2>{name}</h2>
-          <h6>@{handle}</h6>
-          <p>Likes: {rating}</p>
-          <Link to={`/profile/organization/${_id}`} className='btn btn-primary'>
+          <h4>@{handle}</h4>
+          <h4><i class="fas fa-bolt"></i> {rating}</h4>
+         
+      </div>
+      <div>
+      <Link to={`/profile/organization/${_id}`} className='btn btn-primary'>
             View Profile
           </Link>
-        
       </div>
+     
+        
   </div>;
 };
 

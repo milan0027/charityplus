@@ -28,8 +28,8 @@ const UserProfile = ({ getUserProfileById, profile: { profile, loading, error },
                   Edit Profile
                 </Link>
               )}
-            <div className='profile-grid my-1'>
-              <UserProfileTop profile={profile} />
+            <div className='my-1'>
+              <UserProfileTop profile={profile} id={id} />
               <UserProfileAbout profile={profile} />
             </div>
           </Fragment>

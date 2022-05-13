@@ -17,7 +17,7 @@ const OrganizationProfileTop = ({ profile: {
 }, auth, follow, id}) => {
     return (
         <>
-        <div className="profile bg-primary p-2">
+        <div className="profile-top bg-primary p-2">
           <img
             className="round-img"
             src={avatar}

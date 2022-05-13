@@ -1,28 +1,38 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const ProfileItem = ({ profile:{ 
-    user:{ _id, name, avatar ,rating},
+const ProfileItem = ({
+  profile: {
+    user: { _id, name, avatar, rating },
     handle,
     location,
-}}) => {
-  return <div className='profile bg-light'>
-      <img src={avatar} alt="" className='round-img'/>
+  },
+}) => {
+  return (
+    <div className='profile bg-light'>
       <div>
-          <h2>{name}</h2>
-          <h6>@{handle}</h6>
-          <p>Rating: {rating}</p>
-          <p className='my-1'>{location && <span>{location}</span>}</p>
-          <Link to={`/profile/user/${_id}`} className='btn btn-primary'>
-            View Profile
-          </Link>
+        <img src={avatar} alt='' className='round-img' />
       </div>
-  </div>;
+
+      <div>
+        <h2>{name}</h2>
+        <h4>@{handle}</h4>
+        <h4>
+          Rating: {rating}
+        </h4>
+      </div>
+      <div>
+        <Link to={`/profile/user/${_id}`} className='btn btn-primary'>
+          View Profile
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 ProfileItem.propTypes = {
-    profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default ProfileItem;
