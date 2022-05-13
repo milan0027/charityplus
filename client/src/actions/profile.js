@@ -6,7 +6,9 @@ import {
     PROFILE_ERROR,
     REQUEST_PROFILE,
     GET_PROFILES,
-    CLEAR_PROFILE
+   // CLEAR_PROFILE,
+    GET_POSTS,
+    OTHER_GET_PROFILE, OTHER_PROFILE_ERROR, OTHER_CLEAR_PROFILE,
 } from './types'
 
 //get current users profile
@@ -32,7 +34,6 @@ export const getCurrentProfile = () => async dispatch => {
 }
 //get all user profiles
 export const getUserProfiles =() =>async dispatch => {
-    dispatch({type: CLEAR_PROFILE });
     try{
         const res= await axios.get('/api/profile/user');
         dispatch({
@@ -49,16 +50,17 @@ export const getUserProfiles =() =>async dispatch => {
 
 //get user profile by id
 export const getUserProfileById = userId=>async dispatch => {
-    dispatch({type: CLEAR_PROFILE });
+    dispatch({type: OTHER_CLEAR_PROFILE });
     try{
         const res= await axios.get(`/api/profile/user/${userId}`);
+        console.log(res.data)
         dispatch({
-            type: GET_PROFILE,
+            type: OTHER_GET_PROFILE,
             payload: res.data
         });
     }catch(e){
         dispatch({
-            type: PROFILE_ERROR,
+            type: OTHER_PROFILE_ERROR,
             payload: { msg: e.response.statusText, status: e.response.status}
         });
     }
@@ -66,7 +68,6 @@ export const getUserProfileById = userId=>async dispatch => {
 
 //get all organization profiles
 export const getOrganizationProfiles =() =>async dispatch => {
-    dispatch({type: CLEAR_PROFILE });
     try{
         const res= await axios.get('/api/profile/organization');
         dispatch({
@@ -83,16 +84,22 @@ export const getOrganizationProfiles =() =>async dispatch => {
 
 //get Organization profile by id
 export const getOrganizationProfileById = userId=>async dispatch => {
-    dispatch({type: CLEAR_PROFILE });
+    dispatch({type: OTHER_CLEAR_PROFILE });
     try{
         const res= await axios.get(`/api/profile/organization/${userId}`);
+        const postsData = res.data.posts.map( item => item.post).filter( item => item !== null);
         dispatch({
-            type: GET_PROFILE,
+            type: OTHER_GET_PROFILE,
             payload: res.data
         });
+        dispatch({
+            type: GET_POSTS,
+            payload: postsData
+        })
+        
     }catch(e){
         dispatch({
-            type: PROFILE_ERROR,
+            type: OTHER_PROFILE_ERROR,
             payload: { msg: e.response.statusText, status: e.response.status}
         });
     }
@@ -145,13 +152,18 @@ export const follow = id =>async dispatch => {
     try{
         const res= await axios.post(`/api/profile/follow/${id}`);
         dispatch({
-            type: GET_PROFILE,
+            type: OTHER_GET_PROFILE,
             payload: res.data.profile
         });
         dispatch(setAlert((res.data.state ? 'followed successfully' : 'unfollowed successfully'),'success'));
     }catch(e){
+        const errors = e.response.data.errors
+
+        if(errors) {
+            errors.forEach(error => dispatch( setAlert(error.msg, 'danger')))
+        }
         dispatch({
-            type: PROFILE_ERROR,
+            type: OTHER_PROFILE_ERROR,
             payload: { msg: e.response.statusText, status: e.response.status}
         });
     }

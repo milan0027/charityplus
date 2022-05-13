@@ -3,7 +3,6 @@ import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE, REQUEST_PROFILE ,GET_PROFILE
 const initialState = {
     profile: null,
     profiles: [],
-    repos: [],
     loading: true,
     error: null,
     request_profile: false   
@@ -39,7 +38,6 @@ function profile(state=initialState, action) {
             return {
                ...state,
                profile: null,
-               repos:[],
                loading: false 
             }
         case REQUEST_PROFILE:

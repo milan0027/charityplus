@@ -8,8 +8,9 @@ import PostItem from "../posts/PostItem";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 import { getCurrentProfile } from "../../actions/profile";
+import NotFound from "../layout/NotFound";
 
-const Post = ({ getPost, post: { post, loading }, profile: {profile, loading: profileLoading}, getCurrentProfile }) => {
+const Post = ({ getPost, post: { post, loading, error }, profile: {profile, loading: profileLoading}, getCurrentProfile }) => {
   let { id } = useParams();
   useEffect(() => {
     getPost(id);
@@ -20,8 +21,8 @@ const Post = ({ getPost, post: { post, loading }, profile: {profile, loading: pr
   return (
     <>
       <section className='container'>
-        {loading || post === null ? (
-          <Spinner />
+        {loading || post === null ? ( !error?
+          <Spinner />:<NotFound/>
         ) : (
           <>
             <Link to='/posts' className='btn'>

@@ -11,7 +11,19 @@ router.get("/me", auth, async (req, res) => {
     const profile = await Profile.findOne({ user: req.user.id }).populate(
       "user",
       ["name", "avatar", "rating", "type_of", "date"]
-    );
+    ).populate({
+      path:"contributions",
+      populate:{
+        path: 'comment',
+        model: 'Comment'
+      }
+    }).populate({
+      path:"posts",
+      populate:{
+        path: 'post',
+        model: 'Post'
+      }
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "no profile exists" });
@@ -201,12 +213,24 @@ router.delete("/", auth, async (req, res) => {
 router.post("/follow/:id", auth, async (req, res) => {
    
   try {
-    const user = await Profile.findOne({ user: req.user.id }).populate(
-      "following"
-    );
+    const user = await Profile.findOne({ user: req.user.id });
     const organization = await Profile.findOne({
       user: req.params.id,
     }).populate("user", ["name", "avatar", "rating"]);
+
+    if(!user)
+    {
+      return res
+          .status(400)
+          .json({ errors: [{ msg: "Make a profile to continue" }] });
+    }
+
+    if(!organization)
+    {
+      return res
+          .status(400)
+          .json({ errors: [{ msg: "Organization Not Found" }] });
+    }
     //console.log(req.user.id);
     //console.log(organization);
     if (user.type_of || !organization.type_of) {

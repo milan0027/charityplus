@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from 'prop-types'
-import { connect } from "react-redux";
 const UserProfileTop = ({ profile: {
     
     location,
@@ -13,7 +12,7 @@ const UserProfileTop = ({ profile: {
         avatar,
         rating
     }
-}}, auth, id) => {
+}}) => {
     return (
       <>
       <div className="profile-top bg-primary p-2">
@@ -76,9 +75,6 @@ const UserProfileTop = ({ profile: {
 
 UserProfileTop.propTypes = {
     profile: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
 }
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-export default connect(mapStateToProps)(UserProfileTop);
+
+export default UserProfileTop;

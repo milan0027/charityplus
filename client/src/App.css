@@ -11,13 +11,14 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
 }
 
 body {
   font-family: 'Raleway', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #fff;
+  background-color: #FDF6EC;
   color: #333;
 }
 
@@ -473,17 +474,31 @@ button {
 
 .post {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns:  4fr;
   grid-gap: 2rem;
   align-items: center;
 }
-
-.post > div:first-child {
-  text-align: center;
+.post-image-name {
+  /* display: grid;
+  grid-template-columns: 1fr 15fr;
+  grid-gap: 0.2rem; */
+  align-items: center;
+  margin-bottom: -30px;
 }
 
+.post-name {
+   margin-left: 10px;
+   font-size:larger;
+   font-weight: 600;
+}
+
+.post-content {
+  margin-top: -30px;
+}
+
+
 .post img {
-  width: 100px;
+  width: 35px;
 }
 
 .post .comment-count {

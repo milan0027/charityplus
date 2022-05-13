@@ -237,7 +237,8 @@ router.post('/comment/:id',[auth, [
             text: req.body.text,
             name: user.name,
             avatar: user.avatar,
-            user: req.user.id
+            user: req.user.id,
+            post: req.params.id,
         });
         //save the commemt
         const comment=await newComment.save();
@@ -437,6 +438,7 @@ router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
         }
 
         const user = await User.findById(comment.user.toString());
+        if(!user.type_of)
         user.rating = user.rating + 5;
 
          //get remove index

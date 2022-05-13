@@ -7,7 +7,8 @@ import { getUserProfileById } from "../../actions/profile";
 import { Link, useParams } from "react-router-dom";
 import UserProfileAbout from "./UserProfileAbout";
 import NotFound from "../layout/NotFound";
-const UserProfile = ({ getUserProfileById, profile: { profile, loading, error }, auth }) => {
+import UserProfileBottom from "./UserProfileBottom";
+const UserProfile = ({ getUserProfileById, otherprofile: { profile, loading, error }, auth }) => {
   let { id } = useParams();
   useEffect(() => {
     getUserProfileById(id);
@@ -31,6 +32,7 @@ const UserProfile = ({ getUserProfileById, profile: { profile, loading, error },
             <div className='my-1'>
               <UserProfileTop profile={profile} id={id} />
               <UserProfileAbout profile={profile} />
+              <UserProfileBottom profile={profile}/>
             </div>
           </Fragment>
         )}
@@ -41,12 +43,12 @@ const UserProfile = ({ getUserProfileById, profile: { profile, loading, error },
 
 UserProfile.propTypes = {
   getUserProfileById: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
+  otherprofile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  profile: state.profile,
+  otherprofile: state.otherprofile,
   auth: state.auth,
 });
 

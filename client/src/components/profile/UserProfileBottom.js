@@ -1,19 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import PostItem from "../posts/PostItem";
+import CommentItemAtProfile from "./CommentItemAtProfile";
 const UserProfileBottom = ({
   profile: {
       contributions
   },
 }) => {
-    console.log(posts);
+  console.log(contributions)
   return (
-    <div className='profile-about bg-light p-2'>
+    <div className='profile-about bg-light p-2 my-1'>
         <h2 className='text-primary'>Contributions</h2>
       {
-          posts && posts.map(({post})=>{
+          contributions && contributions.map(({comment})=>{
               return(
-                  <PostItem post={post} key={post._id.toString()} />
+                  <CommentItemAtProfile comment={comment} key={comment._id.toString()} />
               )
           })
       }

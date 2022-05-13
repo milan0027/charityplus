@@ -11,7 +11,7 @@ import NotFound from "../layout/NotFound";
 import Alert from "../layout/alert";
 const OrganizationProfile = ({
   getOrganizationProfileById,
-  profile: { profile, loading, error },
+  otherprofile: { profile, loading, error },
   auth,
 }) => {
   let { id } = useParams();
@@ -45,7 +45,7 @@ const OrganizationProfile = ({
               <div className='my-1'>
               <OrganizationProfileTop profile={profile} id={id} />
               <OrganizationProfileAbout profile={profile} />
-              <OrganizationProfileBottom  profile={profile}/>
+              <OrganizationProfileBottom/>
               </div>
             }
           
@@ -58,12 +58,12 @@ const OrganizationProfile = ({
 
 OrganizationProfile.propTypes = {
   getOrganizationProfileById: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
+  otherprofile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  profile: state.profile,
+  otherprofile: state.otherprofile,
   auth: state.auth,
 });
 
