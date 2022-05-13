@@ -91,5 +91,18 @@ router.post('/', [
    
     //res.send('user route')
 })
-
+router.get("/rating",  async (req, res) => {
+    try {
+      const users = await User.find({ type_of: false }).sort({rating:-1});
+  
+      if (!users) {
+        return res.status(400).json({ msg: "no users found" });
+      }
+      console.log(users);
+      res.json(users);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+    }
+  });
 module.exports = router

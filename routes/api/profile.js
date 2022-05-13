@@ -116,7 +116,13 @@ router.get("/user/:user_id", async (req, res) => {
     const profile = await Profile.findOne({
       user: req.params.user_id,
       type_of: false,
-    }).populate("user", ["name", "avatar", "rating"]);
+    }).populate("user", ["name", "avatar", "rating"]).populate({
+      path:"contributions",
+      populate:{
+        path: 'comment',
+        model: 'Comment'
+      }
+    });
     if (!profile) return res.status(400).json({ msg: "profile not found" });
 
     res.json(profile);
@@ -155,9 +161,14 @@ router.get("/organization/:user_id", async (req, res) => {
     const profile = await Profile.findOne({
       user: req.params.user_id,
       type_of: true,
-    }).populate("user", ["name", "avatar", "rating"]);
+    }).populate("user", ["name", "avatar", "rating"]).populate({
+      path:"posts",
+      populate:{
+        path: 'post',
+        model: 'Post'
+      }
+    });
     if (!profile) return res.status(400).json({ msg: "profile not found" });
-
     res.json(profile);
   } catch (err) {
     console.error(err.message);
