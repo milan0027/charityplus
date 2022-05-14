@@ -6,7 +6,6 @@ const UserProfileBottom = ({
       contributions
   },
 }) => {
-  console.log(contributions)
   return (
     <div className='profile-about bg-light p-2 my-1'>
         <h2 className='text-primary'>Contributions</h2>

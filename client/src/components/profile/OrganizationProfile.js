@@ -43,7 +43,7 @@ const OrganizationProfile = ({
               )}
             {
               <div className='my-1'>
-              <OrganizationProfileTop profile={profile} id={id} />
+              <OrganizationProfileTop otherprofile={profile} id={id} />
               <OrganizationProfileAbout profile={profile} />
               <OrganizationProfileBottom/>
               </div>

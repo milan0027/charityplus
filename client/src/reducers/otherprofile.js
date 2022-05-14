@@ -29,7 +29,6 @@ function otherprofile(state=initialState, action) {
             return {
                ...state,
                profile: null,
-               repos:[],
                loading: false 
             }
         default: 

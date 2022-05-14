@@ -24,7 +24,7 @@ router.post('/',[ auth, [
         const user = await User.findById(req.user.id).select('-password')
         const organization= await Profile.findOne({user: req.user.id});
         if(!user.type_of)
-        return res.status(400).json({ errors: [{"msg": "you are not allowed to post"}]})
+        return res.status(400).json({ errors: [{"msg": "You are not allowed to post!"}]})
 
         const newPost = new Post({
             text: req.body.text,
@@ -243,6 +243,7 @@ router.post('/comment/:id',[auth, [
         //save the commemt
         const comment=await newComment.save();
         post.comments.unshift(comment);
+        if( !userProfile.type_of )
         userProfile.contributions.unshift({comment: comment._id});
         await userProfile.save();
         await post.save();

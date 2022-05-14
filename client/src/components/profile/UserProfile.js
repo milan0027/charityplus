@@ -13,7 +13,6 @@ const UserProfile = ({ getUserProfileById, otherprofile: { profile, loading, err
   useEffect(() => {
     getUserProfileById(id);
   }, [getUserProfileById, id]);
-
   return (
     <Fragment>
       <section className='container'>
@@ -30,7 +29,7 @@ const UserProfile = ({ getUserProfileById, otherprofile: { profile, loading, err
                 </Link>
               )}
             <div className='my-1'>
-              <UserProfileTop profile={profile} id={id} />
+              <UserProfileTop otherprofile={profile} id={id} />
               <UserProfileAbout profile={profile} />
               <UserProfileBottom profile={profile}/>
             </div>

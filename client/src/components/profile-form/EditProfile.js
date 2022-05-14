@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { createProfile, getCurrentProfile } from '../../actions/profile'
 import Alert from '../layout/alert';
 import Spinner from '../layout/Spinner';
@@ -60,7 +60,7 @@ useEffect(() => {
   if (request_profile) {
     navigate("/dashboard");
   }
-}, [request_profile]);
+}, [request_profile,navigate]);
  
  return (<Fragment>
     <section className='container'>

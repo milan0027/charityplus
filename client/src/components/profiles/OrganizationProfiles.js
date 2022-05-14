@@ -14,7 +14,7 @@ const OrganizationProfiles = ({ getOrganizationProfiles , profile:{ profiles, lo
   return (
   <>
   <section className='container'>
-   { loading ? <Spinner /> : (<>
+   { loading || profiles === null ? <Spinner /> : (<>
      <h1 className='large text-primary'>Organization</h1>
      <p className='lead'>
          <i className='fab fa-connectdevelop' >find and connect with Organizations</i>
@@ -24,7 +24,7 @@ const OrganizationProfiles = ({ getOrganizationProfiles , profile:{ profiles, lo
              profiles.map(profile => (
                  <OrganizationProfileItem key={profile._id} profile={profile} />
              ))
-         ) : <h4>No profiles to diplay ...</h4>}
+         ) : <h2>No profiles to diplay ...</h2>}
      </div>
    </>) }
    </section>

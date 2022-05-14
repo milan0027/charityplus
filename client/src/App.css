@@ -366,6 +366,15 @@ button {
   line-height: 1.8;
   margin-bottom: 1rem;
 }
+.profile-item {
+  display: grid;
+  grid-template-columns: 1fr 4fr 3fr;
+  align-items: center;
+  grid-gap: 1rem;
+  padding: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
 
 /* Profile Page */
 .profile-grid {
@@ -395,6 +404,9 @@ button {
   width: 100px;
   margin-left: 50px;
   margin-right: 50px;
+}
+.profile-item img{
+  width: 4rem;
 }
 
 .profile-top .icons a {
@@ -558,10 +570,12 @@ button {
   }
 
   /* Profiles Page */
-  .profile {
+  .profile, .profile-top, .profile-item {
     grid-template-columns: 1fr;
     text-align: center;
   }
+
+  
 
   .profile ul {
     display: none;
@@ -570,6 +584,7 @@ button {
   /* Profile Page */
 
   .profile-top img,
+  .profile-item img,
   .profile img {
     width: 100px;
     margin: auto;

@@ -23,6 +23,18 @@ router.get("/me", auth, async (req, res) => {
         path: 'post',
         model: 'Post'
       }
+    }).populate({
+      path:"followers",
+      populate:{
+        path: 'user',
+        model: 'User'
+      }
+    }).populate({
+      path:"following",
+      populate:{
+        path: 'user',
+        model: 'User'
+      }
     });
 
     if (!profile) {
@@ -78,7 +90,8 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Handle already exists" }] });
       }
-
+    
+      
       if (profile) {
         //update profile
         profile = await Profile.findOneAndUpdate(
@@ -86,13 +99,12 @@ router.post(
           { $set: profileFields },
           { new: true }
         );
-
+      
         return res.json(profile);
       }
 
       //create
       profile = new Profile(profileFields);
-
       await profile.save();
       res.json(profile);
     } catch (err) {
@@ -107,7 +119,8 @@ router.post(
 
 router.get("/user", async (req, res) => {
   try {
-    const profiles = await Profile.find({ type_of: false }).populate("user", [
+    const profiles = await Profile.find({ type_of: false }, {contributions: 0, posts: 0, followers: 0,
+      following: 0 }).populate("user", [
       "name",
       "avatar",
       "rating",
@@ -152,7 +165,8 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.get("/organization", async (req, res) => {
   try {
-    const profiles = await Profile.find({ type_of: true }).populate("user", [
+    const profiles = await Profile.find({ type_of: true },{contributions: 0, posts: 0, followers: 0,
+      following: 0 }).populate("user", [
       "name",
       "avatar",
       "rating",
@@ -266,4 +280,44 @@ router.post("/follow/:id", auth, async (req, res) => {
     res.status(500).send("server error");
   }
 });
+
+router.get('/followers/:id', auth, async(req, res) => {
+
+  try{
+    const organization = await Profile.findOne({
+      user: req.params.id,
+    })
+    const userFollowers = organization.followers.map( item => item.user);
+    const followers = await Profile.find({ user:{ $in: userFollowers}}, {contributions: 0, posts: 0, followers: 0,
+    following: 0 }).populate("user", 
+    ["name", "avatar", "rating"]);
+    return res.json(followers);
+
+  }catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+       
+})
+
+router.get('/following/:id', auth, async(req, res) => {
+
+  try{
+    const user = await Profile.findOne({
+      user: req.params.id,
+    })
+     
+    const userFollowing = user.following.map( item => item.user);
+    const following = await Profile.find({ user:{ $in: userFollowing}}, {contributions: 0, posts: 0, followers: 0,
+      following: 0 }).populate("user", 
+    ["name", "avatar", "rating"]);
+
+    return res.json(following);
+
+  }catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+       
+})
 module.exports = router;

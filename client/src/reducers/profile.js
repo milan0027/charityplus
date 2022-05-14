@@ -1,8 +1,8 @@
-import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE, REQUEST_PROFILE ,GET_PROFILES} from "../actions/types"
+import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE,CLEAR_PROFILES, REQUEST_PROFILE ,GET_PROFILES} from "../actions/types"
 
 const initialState = {
     profile: null,
-    profiles: [],
+    profiles: null,
     loading: true,
     error: null,
     request_profile: false   
@@ -38,6 +38,12 @@ function profile(state=initialState, action) {
             return {
                ...state,
                profile: null,
+               loading: false 
+            }
+        case CLEAR_PROFILES:
+            return {
+               ...state,
+               profiles: null,
                loading: false 
             }
         case REQUEST_PROFILE:

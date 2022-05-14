@@ -8,7 +8,7 @@ import {
     GET_PROFILES,
    // CLEAR_PROFILE,
     GET_POSTS,
-    OTHER_GET_PROFILE, OTHER_PROFILE_ERROR, OTHER_CLEAR_PROFILE,
+    OTHER_GET_PROFILE, OTHER_PROFILE_ERROR, OTHER_CLEAR_PROFILE, CLEAR_PROFILES,
 } from './types'
 
 //get current users profile
@@ -34,6 +34,7 @@ export const getCurrentProfile = () => async dispatch => {
 }
 //get all user profiles
 export const getUserProfiles =() =>async dispatch => {
+    dispatch({ type: CLEAR_PROFILES})
     try{
         const res= await axios.get('/api/profile/user');
         dispatch({
@@ -53,7 +54,6 @@ export const getUserProfileById = userId=>async dispatch => {
     dispatch({type: OTHER_CLEAR_PROFILE });
     try{
         const res= await axios.get(`/api/profile/user/${userId}`);
-        console.log(res.data)
         dispatch({
             type: OTHER_GET_PROFILE,
             payload: res.data
@@ -68,6 +68,7 @@ export const getUserProfileById = userId=>async dispatch => {
 
 //get all organization profiles
 export const getOrganizationProfiles =() =>async dispatch => {
+    dispatch({ type: CLEAR_PROFILES})
     try{
         const res= await axios.get('/api/profile/organization');
         dispatch({
@@ -164,6 +165,39 @@ export const follow = id =>async dispatch => {
         }
         dispatch({
             type: OTHER_PROFILE_ERROR,
+            payload: { msg: e.response.statusText, status: e.response.status}
+        });
+    }
+}
+
+// get list of followers of a organziation
+export const getFollowers = id =>async dispatch => {
+    dispatch({ type: CLEAR_PROFILES})
+    try{
+        const res= await axios.get(`/api/profile/followers/${id}`);
+        dispatch({
+            type: GET_PROFILES,
+            payload: res.data
+        });
+    }catch(e){
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: e.response.statusText, status: e.response.status}
+        });
+    }
+}
+// get list of followering of a user
+export const getFollowing = id =>async dispatch => {
+    dispatch({ type: CLEAR_PROFILES})
+    try{
+        const res= await axios.get(`/api/profile/following/${id}`);
+        dispatch({
+            type: GET_PROFILES,
+            payload: res.data
+        });
+    }catch(e){
+        dispatch({
+            type: PROFILE_ERROR,
             payload: { msg: e.response.statusText, status: e.response.status}
         });
     }
