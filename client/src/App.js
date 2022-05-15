@@ -21,6 +21,7 @@ import OrganizationProfile from './components/profile/OrganizationProfile';
 import Posts from "./components/posts/Posts";
 import Post from "./components/post/Post";
 import NotFound from './components/layout/NotFound';
+import Leaderboard from './components/profiles/Leaderboard';
 if(localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -52,6 +53,7 @@ return(
         <Route path='/edit-profile' element={<PrivateRoute>
           <EditProfile/>
         </PrivateRoute>} />
+        <Route path='/leaderboard' element={<Leaderboard/>} />
         <Route
               path='/posts'
               element={

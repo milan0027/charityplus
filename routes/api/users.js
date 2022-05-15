@@ -5,7 +5,7 @@ const router = express.Router()
 const jwt =  require('jsonwebtoken')
 const config = require('config')
 const { check, validationResult } = require('express-validator')
-
+const Profile= require('../../models/Profile')
 const User = require('../../models/User')
 //@route Post api/users
 //register
@@ -93,13 +93,24 @@ router.post('/', [
 })
 router.get("/rating",  async (req, res) => {
     try {
-      const users = await User.find({ type_of: false }).sort({rating:-1});
-  
-      if (!users) {
+      const profiles = await Profile.find({ type_of: false }, {contributions: 0, posts: 0, followers: 0,
+      following: 0, location:0 , bio:0 , type_of:0 }).populate("user", [
+      "name",
+      "avatar",
+      "rating",
+      "_id"
+      ]);
+
+      profiles.sort((x,y)=>{
+          if(x.user.rating>y.user.rating) return -1;
+          if(x.user.rating<y.user.rating) return 1;
+          return 0;
+      });
+      if (!profiles) {
         return res.status(400).json({ msg: "no users found" });
       }
-      console.log(users);
-      res.json(users);
+    //   console.log(profiles);
+      res.json(profiles);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");

@@ -9,6 +9,7 @@ import {
    // CLEAR_PROFILE,
     GET_POSTS,
     OTHER_GET_PROFILE, OTHER_PROFILE_ERROR, OTHER_CLEAR_PROFILE, CLEAR_PROFILES,
+    GET_LEADERBOARD,LEADERBOARD_ERROR
 } from './types'
 
 //get current users profile
@@ -198,6 +199,23 @@ export const getFollowing = id =>async dispatch => {
     }catch(e){
         dispatch({
             type: PROFILE_ERROR,
+            payload: { msg: e.response.statusText, status: e.response.status}
+        });
+    }
+}
+
+// get users by rank
+export const getLeaderboard = ()=> async dispatch => {
+    try{
+        const res= await axios.get('/api/users/rating');
+        // console.log(res.data);
+        dispatch({
+            type: GET_LEADERBOARD,
+            payload: res.data
+        })
+    }catch(e){
+        dispatch({
+            type: LEADERBOARD_ERROR,
             payload: { msg: e.response.statusText, status: e.response.status}
         });
     }
