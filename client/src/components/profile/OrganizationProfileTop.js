@@ -10,6 +10,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 const OrganizationProfileTop = ({
   otherprofile: {
+    type_of,
     location,
     website,
     social,
@@ -59,7 +60,7 @@ const OrganizationProfileTop = ({
           <h2>{name}</h2>
           <h4>@{handle}</h4>
           <h4>
-            <i class='fas fa-bolt'></i> {rating}
+            <i className='fas fa-bolt'></i> {rating}
           </h4>
           <h4 className='my-1'>
             {location && (
@@ -115,19 +116,22 @@ const OrganizationProfileTop = ({
           </div>
         </div>
         <div>
-          <button
+
+         {  auth.isAuthenticated &&
+            auth.loading === false &&
+            !auth.user.type_of &&
+             <button
             onClick={(e) => follow(id)}
             className='btn btn-dark'
             style={{ width: "160px" }}
           >
-            {auth.isAuthenticated &&
-            auth.loading === false &&
+            {
             followers.filter((item) => item.user.toString() === auth.user._id
             )
               .length > 0
               ? "Unfollow"
               : "Follow"}
-          </button>
+          </button>}
           <button
             onClick={handleClickOpen("paper")}
             className='btn btn-dark my-1'

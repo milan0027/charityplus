@@ -54,7 +54,7 @@ useEffect(() => {
         instagram: loading || !profile.social  ?"": profile.social.instagram,
 
       })
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 useEffect(() => {
   
   if (request_profile) {

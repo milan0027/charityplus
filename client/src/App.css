@@ -1,24 +1,29 @@
 /* Global Styles */
 :root {
-  --primary-color: olive;
+  --primary-color: linear-gradient(150deg, #4341be, #23d1a8);
   --dark-color: #343a40;
   --light-color: #f4f4f4;
-  --danger-color: #dc3545;
+  --danger-color: linear-gradient(150deg, #d53141, #9623c1);
   --success-color: #28a745;
+  --blue-color: #27bcc7;
+  --red-color: #dc3545;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  
 
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family:monospace, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #FDF6EC;
+  background-color: rgb(223, 226, 226);
+ 
+  
   color: #333;
 }
 
@@ -166,7 +171,8 @@ img {
 .btn-primary,
 .bg-primary,
 .badge-primary,
-.alert-primary {
+.alert-primary,
+.alert-success {
   background: var(--primary-color);
   color: #fff;
 }
@@ -197,8 +203,7 @@ img {
 
 .btn-success,
 .bg-success,
-.badge-success,
-.alert-success {
+.badge-success {
   background: var(--success-color);
   color: #fff;
 }
@@ -330,7 +335,7 @@ button {
 }
 
 .navbar a:hover {
-  color: var(--primary-color);
+  color: var(--blue-color);
 }
 
 .navbar .welcome span {
@@ -508,17 +513,36 @@ button {
   margin-top: -30px;
 }
 
+.post-heading-approved {
+  margin-left: 2rem;
+  background-color: var(--success-color);
+  color: white;
+  padding: 0rem 0.5rem;
+  border-radius: 1rem;
+}
 
+.post-heading-pending {
+  margin-left: 2rem;
+  background-color: var(--red-color);
+  color: white;
+  padding: 0rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.post-heading-info {
+  margin-left: 2rem;
+  background-color: var(--dark-color);
+  color: white;
+  padding: 0rem 0.5rem;
+  border-radius: 1rem;
+}
 .post img {
   width: 35px;
 }
 
 .post .comment-count {
-  background: var(--light-color);
-  color: var(--primary-color);
   padding: 0.1rem 0.2rem;
   border-radius: 5px;
-  font-size: 0.8rem;
 }
 
 .post .post-date {

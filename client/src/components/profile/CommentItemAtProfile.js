@@ -5,7 +5,7 @@ import Moment from "react-moment";
 
 
 const CommentItemAtProfile = ({
-  comment: { _id, text, name, avatar, user,post, date,approval},
+  comment: { _id, text, name, avatar, user,post, date,approval, post_event},
 }) => {
   //auth.user._id==organisationId
   // console.log(organisationId);
@@ -17,6 +17,12 @@ const CommentItemAtProfile = ({
             <img className='round-img' src={avatar} alt='' />
             <span className="post-name">{name}</span>
           </Link>
+          
+          <span className="post-heading-info">{post_event ?"Contribution":"Comment"}</span>
+       
+          {post_event && (approval?  <span className="post-heading-approved">Approved</span>:
+        <span className="post-heading-pending">Pending Approval</span>)} 
+        
       </div>
       <hr></hr>
       <div className="post-content">

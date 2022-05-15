@@ -17,7 +17,7 @@ const OrganizationProfiles = ({ getOrganizationProfiles , profile:{ profiles, lo
    { loading || profiles === null ? <Spinner /> : (<>
      <h1 className='large text-primary'>Organization</h1>
      <p className='lead'>
-         <i className='fab fa-connectdevelop' >find and connect with Organizations</i>
+         <i className='fab fa-connectdevelop' ></i> Find and connect with Organizations
      </p>
      <div className='profiles'>
          {profiles.length > 0 ? (

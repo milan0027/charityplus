@@ -21,7 +21,7 @@ const Posts = ({ getPosts, post: { posts, loading }, getCurrentProfile, profile:
           <>
       <h1 className='large text-primary'>Posts</h1>
       <p className='lead'>
-          <i className='fas fa-user'>Welcome to the Community</i>
+          <i className='fas fa-user'></i> Welcome to the Community
       </p>
      {!profileLoading &&profile&& profile.type_of? <PostForm/>:''}
       <div className='posts'>

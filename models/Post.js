@@ -15,6 +15,10 @@ const PostSchema = new Schema({
     avatar: {
         type: String
     },
+    event: {
+        type: Boolean,
+        default: false
+    },
     likes:[
         {
             user: {

@@ -18,7 +18,7 @@ const ProfileItem = ({
         <h2>{name}</h2>
         <h4>@{handle}</h4>
         <h4>
-          Rating: {rating}
+        <i className="fas fa-star"></i> {rating}
         </h4>
       </div>
       <div>

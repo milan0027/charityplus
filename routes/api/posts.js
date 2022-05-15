@@ -22,7 +22,7 @@ router.post('/',[ auth, [
 
     try {
         const user = await User.findById(req.user.id).select('-password')
-        const organization= await Profile.findOne({user: req.user.id});
+       // const organization= await Profile.findOne({user: req.user.id});
         if(!user.type_of)
         return res.status(400).json({ errors: [{"msg": "You are not allowed to post!"}]})
 
@@ -31,16 +31,23 @@ router.post('/',[ auth, [
             name: user.name,
             avatar: user.avatar,
             user: req.user.id,
-            image: req.body.text
+            image: req.body.text,
+            event: req.body.value === 'event'
         })
 
-        organization.posts.unshift({ post: newPost._id});
+        //organization.posts.unshift({ post: newPost._id});
         const post = await newPost.save()
 
-        await organization.save();
+       // await organization.save();
 
         res.json(post)
-        
+
+        //increase activity of organizaion
+        user.rating += 1;
+        await user.save();
+        const organization= await Profile.findOne({user: req.user.id});
+        organization.posts.unshift({ post: newPost._id});
+        await organization.save();
     } catch (err) {
         console.error(err.message)
         res.status(500).send('server error')
@@ -61,6 +68,20 @@ router.get('/', auth, async(req,res)=>{
         const posts = await Post.find().sort({ date: -1})
         res.json(posts)
         
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).send('server error')
+        
+    }
+
+})
+
+//get organization posts
+router.get('/organization/:id', auth, async(req,res) => {
+
+    try{
+        const posts = await Post.find({user: req.params.id}).sort({ date: -1})
+        res.json(posts)
     } catch (err) {
         console.error(err.message)
         res.status(500).send('server error')
@@ -98,7 +119,7 @@ router.get('/:id', auth, async(req,res)=>{
 router.delete('/:id', auth, async(req,res)=>{
 
     try {
-        const profile = await Profile.findOne({user: req.user.id});
+       
         const post = await Post.findById(req.params.id)
 
         if(!post)
@@ -108,21 +129,22 @@ router.delete('/:id', auth, async(req,res)=>{
             return res.status(401).json({msg: 'user not authorized'})
 
         }
-        
-        //remove all comments connected to this post;
-        post.comments.forEach(async(comment)=>{
-            await Comment.findByIdAndDelete(comment.id);
-        });
+        const profile = await Profile.findOne({user: req.user.id});
         if(profile.posts.filter( post => post.post.toString()===req.params.id) > 0){
             const removeIndex = profile.posts.map( post => post.post.toString()).indexOf(req.params.id)
             profile.posts.splice(removeIndex, 1)
             await profile.save()
         }
+       
 
         await post.remove()
-
-        
         res.json({msg: 'post removed'})
+        //remove all comments connected to this post (shoudl do or shouldn't?)
+
+        //decrease activity of organization
+        const user = await User.findById(req.user.id).select('-password')
+        user.rating -= 1;
+        await user.save();
         
     } catch (err) {
         console.error(err.message)
@@ -225,12 +247,12 @@ router.post('/comment/:id',[auth, [
 
     try{
         const user= await User.findById(req.user.id).select('-password');
-        const userProfile= await Profile.findOne({user: req.user.id});
+       
         const post=await Post.findById(req.params.id).populate('comments');
 
         //check if the post exists
         if(!post){
-            res.status(400).json({msg: "post doesnt exist!"});
+           return res.status(400).json({msg: "post doesnt exist!"});
         }
         //make new comment
         const newComment=new Comment({
@@ -239,15 +261,22 @@ router.post('/comment/:id',[auth, [
             avatar: user.avatar,
             user: req.user.id,
             post: req.params.id,
+            approval: user.type_of || !post.event,
+            post_event: post.event,
+            user_typeof: user.type_of
         });
         //save the commemt
         const comment=await newComment.save();
         post.comments.unshift(comment);
+       
+        await post.save();
+        res.json(post);//what do i return again solly
+
+        const userProfile= await Profile.findOne({user: req.user.id});
         if( !userProfile.type_of )
         userProfile.contributions.unshift({comment: comment._id});
         await userProfile.save();
-        await post.save();
-        res.json(post);//what do i return again solly
+        
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -290,15 +319,28 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
         }
         //remove that comment
         post.comments.splice(removeIndex, 1);
-        if(profile.contributions.filter(comment => comment.comment.toString() === req.params.comment_id) > 0){
+        if(profile.contributions.filter(comment => comment.comment.toString() === req.params.comment_id).length > 0){
+
+          
             const removalIndex = profile.contributions.map(comment => comment.comment.toString()).indexOf(req.params.comment_id)
             profile.contributions.splice(removalIndex, 1)
         }
+       
+      
+     
 
         await post.save();
         await comment.remove();
         await profile.save();
         res.json({});//what to return? krdia ab solly
+
+        //decrease rating
+        const user = await User.findById(comment.user.toString());
+        if(!user.type_of && comment.approval && comment.post_event)
+        {
+            user.rating -= 1;
+            await user.save();
+        }
     }catch(e){
         console.log(e.message);
         res.status(500).send('Server Error');
@@ -438,9 +480,7 @@ router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
             return res.status(401).json({msg: "user not authorized"}); 
         }
 
-        const user = await User.findById(comment.user.toString());
-        if(!user.type_of)
-        user.rating = user.rating + 5;
+       
 
          //get remove index
          const approveIndex=post.comments.map(commentId => commentId.toString()).indexOf(req.params.comment_id);
@@ -449,12 +489,20 @@ router.put('/comment/approve/:id/:comment_id', auth, async(req, res) => {
          }
 
          comment.approval = true;
-         await user.save();
+        
          await comment.save();
          await post.save();
 
          res.json({});
 
+         //increase rating
+         const user = await User.findById(comment.user.toString());
+         if(!user.type_of)
+         {
+            user.rating += 1;
+            await user.save();
+         }
+        
 
     }catch(e){
         console.log(e.message);

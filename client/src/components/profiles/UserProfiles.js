@@ -16,7 +16,7 @@ const UserProfiles = ({ getUserProfiles , profile:{ profiles, loading }}) => {
    { loading || profiles ===  null ? <Spinner /> : (<>
      <h1 className='large text-primary'>Users</h1>
      <p className='lead'>
-         <i className='fab fa-connectdevelop' >find connect with other users</i>
+         <i className='fab fa-connectdevelop' ></i> Find connect with other users
      </p>
      <div className='profiles'>
          {profiles.length > 0 ? (

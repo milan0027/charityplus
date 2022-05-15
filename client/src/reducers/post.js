@@ -6,6 +6,7 @@ import {
   UPDATE_LIKES,
   UPDATE_UNLIKES,
   GET_POST,
+  CLEAR_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
   UPDATE_COMMENT_LIKES,
@@ -52,6 +53,13 @@ function post(state = initialState, action) {
         loading: false,
         error: null,
       };
+    case CLEAR_POST:
+      return {
+        ...state,
+        post:null,
+        loading: false,
+        error: null
+      }
     case POST_ERROR:
       return {
         ...state,

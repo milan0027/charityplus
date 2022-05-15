@@ -24,7 +24,7 @@ const ProfileItem = ({ profile:{
       </div>
      
         
-  </div>;
+  </div>
 };
 
 ProfileItem.propTypes = {

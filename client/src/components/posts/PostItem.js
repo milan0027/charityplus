@@ -9,7 +9,7 @@ const PostItem = ({
   removeLike,
   deletePost,
   auth,
-  post: { _id, text, name, avatar, user, likes, unlikes, comments, date },
+  post: { _id, text, name, avatar, user, likes, unlikes, comments, date, event },
   showActions,
 }) => {
   return (
@@ -19,6 +19,9 @@ const PostItem = ({
             <img className='round-img' src={avatar} alt='' />
             <span className="post-name">{name}</span>
           </Link>
+
+          {event?  <span className="post-heading-approved">Event</span>:
+        <span className="post-heading-pending">Post</span>}
       </div>
       <hr></hr>
       <div className="post-content">

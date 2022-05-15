@@ -9,6 +9,7 @@ import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 import { getCurrentProfile } from "../../actions/profile";
 import NotFound from "../layout/NotFound";
+import Alert from "../layout/alert";
 
 const Post = ({ getPost, post: { post, loading, error }, profile: {profile, loading: profileLoading}, getCurrentProfile }) => {
   let { id } = useParams();
@@ -21,6 +22,7 @@ const Post = ({ getPost, post: { post, loading, error }, profile: {profile, load
   return (
     <>
       <section className='container'>
+      <Alert/>
         {loading || post === null ? ( !error?
           <Spinner />:<NotFound/>
         ) : (
@@ -35,7 +37,7 @@ const Post = ({ getPost, post: { post, loading, error }, profile: {profile, load
               </div>
             <div className="comments">
                 {post.comments.map(comment => (
-                    <CommentItem key={comment._id} comment= {comment} postId={post._id} organisationId={post.user.toString()}/>
+                    <CommentItem key={comment._id} event={post.event} comment= {comment} postId={post._id} organisationId={post.user.toString()}/>
                 ))}
             </div>
           </>

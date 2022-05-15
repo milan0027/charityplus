@@ -54,7 +54,7 @@ const UserProfileTop = ({
         <div>
           <h2>{name}</h2>
           <h4>@{handle}</h4>
-          <h4>Rating: {rating}</h4>
+          <h4><i className="fas fa-star"></i> {rating}</h4>
           <h4 className='my-1'>
             {location && (
               <span>

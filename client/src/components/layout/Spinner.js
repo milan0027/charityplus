@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react';
-import spinner from './spinner.gif'
+import { css } from "@emotion/react";
+import PuffLoader from "react-spinners/PuffLoader";
 
+const override = css`
+  display: block;
+  margin: 100px auto;
+  border-color: red;
+`;
 const Spinner = () => {
   return (
       <Fragment>
-          <img
-          src={spinner}
-          style={{width: '200px', margin:'auto', display:'block'}}
-          alt='Loading...'
-          />
+         <PuffLoader color={"red"} loading={true} css={override} size={150} />
       </Fragment>
   );
 };

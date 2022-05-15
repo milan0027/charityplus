@@ -47,6 +47,12 @@ const commentSchema=new Schema({
     approval: {
         type: Boolean,
         default: false
+    },
+    post_event: {
+        type: Boolean
+    },
+    user_typeof: {
+        type: Boolean
     }
 });
 

@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-//import axios from "axios";
-import { Label, FormGroup, Input } from "reactstrap";
 import { connect } from 'react-redux'
 import { register } from '../../actions/auth'
 import { setAlert } from '../../actions/alert'
 import PropTypes from 'prop-types';
 import Alert from '../layout/alert';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 
 const Register = ({setAlert, register, isAuthenticated}) => {
@@ -15,12 +17,15 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     email: "",
     password: "",
     password2: "",
-    type_of: "false"
   });
 
+  const [value, setValue] = React.useState('false');
 
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
-  const { name, email,type_of, password, password2 } = formData;
+  const { name, email, password, password2 } = formData;
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -28,31 +33,9 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     e.preventDefault();
     if (password !== password2)  setAlert('Passwords do not match', 'danger', 5000)
     else {
-      // const newUser ={
-      //   name,
-      //   email,
-      //   password,
-      //   type_of
-      // }
-      // try {
-      //   const config = {
-      //     headers: {
-      //       'Content-Type':'application/json'
-      //     }
-      //   }
-
-      //   const body = JSON.stringify(newUser)
-
-      //   const res = await axios.post('/api/users', body, config)
-      //   console.log(res.data)
-
-      // } catch (err) {
-
-      //   console.error(err.response.data)
-
-      // }
+     
       console.log(formData)
-      register({ name, email,type_of, password})
+      register({ name, email,type_of: value, password})
     }
   };
 
@@ -92,18 +75,19 @@ const Register = ({setAlert, register, isAuthenticated}) => {
               Gravatar email
             </small>
           </div>
-          <FormGroup check>
-            <Input name='type_of' type='radio' checked={type_of === "false"} value="false" onChange={(e) => onChange(e)} />{" "}
-            <Label check>
-              Register as User
-            </Label>
-          </FormGroup>
-          <FormGroup check>
-            <Input name='type_of' type='radio' checked={type_of === "true"} value="true" onChange={(e) => onChange(e)} />{" "}
-            <Label check>
-              Register as Organization
-            </Label>
-          </FormGroup>
+          <FormControl>
+     <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="false" control={<Radio />} label="Register as User" />
+        <FormControlLabel value="true" control={<Radio />} label="Register as Organization" />
+       
+      </RadioGroup>
+      </FormControl>
           <div className='form-group'>
             <input
               type='password'

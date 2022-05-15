@@ -43,9 +43,9 @@ const OrganizationProfile = ({
               )}
             {
               <div className='my-1'>
-              <OrganizationProfileTop otherprofile={profile} id={id} />
+              <OrganizationProfileTop otherprofile={profile}  id={id} />
               <OrganizationProfileAbout profile={profile} />
-              <OrganizationProfileBottom/>
+              <OrganizationProfileBottom  id={id}/>
               </div>
             }
           
