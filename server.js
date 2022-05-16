@@ -1,12 +1,16 @@
 const express = require('express')
 const connectDB = require('./config/db')
 const app = express()
+const fileUpload = require('express-fileupload');
 
 //connect database
 connectDB()
 
 //init middleware
-app.use(express.json({extended: false}))
+app.use(express.json())
+//app.use(express.urlencoded({ extended: true }));
+
+app.use(fileUpload()); 
 app.get('/', (req,res) => res.send('API Running'))
 
 //routes

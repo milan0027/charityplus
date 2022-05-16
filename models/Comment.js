@@ -17,10 +17,10 @@ const commentSchema=new Schema({
     name: {
         type:String
     },
-    images:{
-        type: [String]
-        // required: true
-    },
+    image: [ {
+        url: String,
+        filename: String
+    }],
     avatar: {
         type: String
     },

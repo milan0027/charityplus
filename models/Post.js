@@ -35,9 +35,10 @@ const PostSchema = new Schema({
             }
         }
     ],
-    image:{
-        type:String
-    },
+    image: [ {
+        url: String,
+        filename: String
+    }],
     comments: [
         {
             type:Schema.Types.ObjectId,

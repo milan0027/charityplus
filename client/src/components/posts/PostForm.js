@@ -10,19 +10,31 @@ import FormControl from '@mui/material/FormControl';
 const PostForm = ({ addPost }) => {
   const [text, setText] = useState('');
   const [value, setValue] = React.useState('post');
+  const [image, setImage] = useState({});
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+
+  const imageChange = (event) => {
+    setImage(event.target.files[0]);
+    console.log(event.target.files.length)
+  }
   return (<div className="post-form">
   <div className="bg-primary p">
     <h3>Write a Post</h3>
   </div>
-  <form className="form my-1" onSubmit={e => {
+  <form className="form my-1"  onSubmit={e => {
       e.preventDefault()
-      addPost({ text, value })
+      const form = new FormData();
+      form.append('text',text);
+      form.append('value',value);
+      form.append('image',image);
+   
+      addPost(form)
       setText('')
       setValue('post')
+      setImage({})
   }}>
     <textarea
       name="text"
@@ -46,6 +58,13 @@ const PostForm = ({ addPost }) => {
        
       </RadioGroup>
       </FormControl>
+      <input
+    className='form-input bg-light'
+    name='image'
+    type='file'
+  
+    onChange={imageChange}
+/>
     <input type="submit" className="btn btn-dark my-1" value="Submit" />
   </form>
 </div>);

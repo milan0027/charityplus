@@ -6,32 +6,35 @@ const auth = require('../../middleware/auth')
 const Post = require("../../models/Post")
 const User = require("../../models/User")
 const Comment = require("../../models/Comment")
-
+const multer = require('multer');
+const { storage} = require('../../cloudinary/index');
+const upload = multer({ storage });
 //@route GET api/posts
 //desc   create a post
 //access  private
-router.post('/',[ auth, [
-    check('text','Text is required')
-    .not()
-    .isEmpty()
-]], async (req,res)=> {
-    const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({ errors: errors.array()})
-    }
-
+router.route('/')
+.post(auth, upload.single('image'), async (req,res)=> {
+    //console.log(req.body)
+    // const errors = validationResult(req)
+   
+    // if(!errors.isEmpty()){
+    //     return res.status(400).json({ errors: errors.array()})
+    // }
+    //console.log(req)
     try {
         const user = await User.findById(req.user.id).select('-password')
        // const organization= await Profile.findOne({user: req.user.id});
         if(!user.type_of)
         return res.status(400).json({ errors: [{"msg": "You are not allowed to post!"}]})
-
+        console.log("body:",req.body);
+        console.log("files:",req.files);
         const newPost = new Post({
             text: req.body.text,
             name: user.name,
             avatar: user.avatar,
             user: req.user.id,
-            image: req.body.text,
+           // image: req.files.map(f=>({ url: f.path.replace('upload/','upload/w_800,h_600,c_pad,b_white/'),
+               //    filename: f.name})),
             event: req.body.value === 'event'
         })
 
@@ -239,7 +242,7 @@ router.put('/unlike/:id',auth, async (req, res) => {
 // @access  Private
 router.post('/comment/:id',[auth, [
     check('text','text is required').not().isEmpty()
-]],async(req,res)=> {
+]],upload.array('image'),async(req,res)=> {
     const errors=validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({errors: errors.array()});
@@ -261,6 +264,8 @@ router.post('/comment/:id',[auth, [
             avatar: user.avatar,
             user: req.user.id,
             post: req.params.id,
+            image: req.files.map(f=>({ url: f.path.replace('upload/','upload/w_800,h_600,c_pad,b_white/'),
+                   filename: f.filename})),
             approval: user.type_of || !post.event,
             post_event: post.event,
             user_typeof: user.type_of

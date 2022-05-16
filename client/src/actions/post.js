@@ -14,7 +14,7 @@ import {
     UPDATE_COMMENT_UNLIKES,
     APPROVE_COMMENT,
     CLEAR_POST
-} from './types'
+} from './types';
 
 // get posts 
 export const getPosts = () => async dispatch => {
@@ -118,12 +118,18 @@ export const deletePost = id => async dispatch => {
 
 // add post
 export const addPost = formData => async dispatch => {
+    //console.log(formData)
+    
+    console.log(formData.get('image'))
+    console.log(formData.get('text'))
     const config = {
-        header: {
-            'Content-Type': 'application/json'
-        }
+        headers: {
+            'content-type': `multipart/form-data`
+        },
     }
+  
 
+    
     try {
         const res = await axios.post(`/api/posts`, formData, config)
 
