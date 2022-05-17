@@ -410,7 +410,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
         }
         profile.notifications.unshift({
           url: `/posts/${post._id.toString()}`,
-          text: `Your contribution was denied for the event created by ${post.name} (@${organization.handle})}`,
+          text: `Your contribution was denied for the event created by ${post.name} (@${organization.handle})`,
         });
         console.log(profile);
         await profile.save();

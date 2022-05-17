@@ -101,13 +101,74 @@ router.post(
           { new: true }
         );
 
-        return res.json(profile);
+        const resProfile = await Profile.findOne({user: req.user.id}).populate("user", ["name", "avatar", "rating", "type_of", "date"])
+        .populate({
+          path: "contributions",
+          populate: {
+            path: "comment",
+            model: "Comment",
+          },
+        })
+        .populate({
+          path: "posts",
+          populate: {
+            path: "post",
+            model: "Post",
+          },
+        })
+        .populate({
+          path: "followers",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
+        .populate({
+          path: "following",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
+
+        return res.json(resProfile);
       }
 
       //create
       profile = new Profile(profileFields);
       await profile.save();
-      res.json(profile);
+      const resProfile = await Profile.findOne({user: req.user.id}).populate("user", ["name", "avatar", "rating", "type_of", "date"])
+      .populate({
+        path: "contributions",
+        populate: {
+          path: "comment",
+          model: "Comment",
+        },
+      })
+      .populate({
+        path: "posts",
+        populate: {
+          path: "post",
+          model: "Post",
+        },
+      })
+      .populate({
+        path: "followers",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      })
+      .populate({
+        path: "following",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      })
+
+      return res.json(resProfile);
+      res.json(resProfile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");
