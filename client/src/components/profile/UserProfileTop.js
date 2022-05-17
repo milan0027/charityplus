@@ -8,6 +8,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import {Link} from 'react-router-dom';
 const UserProfileTop = ({
   otherprofile: {
     location,
@@ -65,46 +66,42 @@ const UserProfileTop = ({
 
           <div className='icons'>
             {website && (
-              <a href={website} target='_blank' rel='noopener noreferrer'>
+              <Link to={website} target='_blank'>
                 <i className='fab fa-globe fa-2x'></i>
-              </a>
+              </Link>
             )}
             {social && social.twitter && (
-              <a
-                href={social.twitter}
+              <Link
+                to={social.twitter}
                 target='_blank'
-                rel='noopener noreferrer'
               >
                 <i className='fab fa-twitter fa-2x'></i>
-              </a>
+              </Link>
             )}
             {social && social.facebook && (
-              <a
-                href={social.facebook}
+              <Link
+                to={social.facebook}
                 target='_blank'
-                rel='noopener noreferrer'
               >
                 <i className='fab fa-facebook fa-2x'></i>
-              </a>
+              </Link>
             )}
             {social && social.linkedin && (
-              <a
-                href={social.linkedin}
+              <Link
+                to={social.linkedin}
                 target='_blank'
-                rel='noopener noreferrer'
               >
                 <i className='fab fa-linkedin fa-2x'></i>
-              </a>
+              </Link>
             )}
 
             {social && social.instagram && (
-              <a
-                href={social.instagram}
+              <Link
+                to={social.instagram}
                 target='_blank'
-                rel='noopener noreferrer'
               >
                 <i className='fab fa-instagram fa-2x'></i>
-              </a>
+              </Link>
             )}
           </div>
         </div>

@@ -83,7 +83,7 @@ const DashboardActions = ({ profile, id, setNotificationsZero }) => {
           </DialogActions>
         </Dialog>
       </div>
-      {profile.type_of ? (
+      {profile && profile.type_of ? (
         <>
           {" "}
           <div className='my-1'>
