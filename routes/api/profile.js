@@ -8,34 +8,36 @@ const User = require("../../models/User");
 //access private
 router.get("/me", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }).populate(
-      "user",
-      ["name", "avatar", "rating", "type_of", "date"]
-    ).populate({
-      path:"contributions",
-      populate:{
-        path: 'comment',
-        model: 'Comment'
-      }
-    }).populate({
-      path:"posts",
-      populate:{
-        path: 'post',
-        model: 'Post'
-      }
-    }).populate({
-      path:"followers",
-      populate:{
-        path: 'user',
-        model: 'User'
-      }
-    }).populate({
-      path:"following",
-      populate:{
-        path: 'user',
-        model: 'User'
-      }
-    });
+    const profile = await Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar", "rating", "type_of", "date"])
+      .populate({
+        path: "contributions",
+        populate: {
+          path: "comment",
+          model: "Comment",
+        },
+      })
+      .populate({
+        path: "posts",
+        populate: {
+          path: "post",
+          model: "Post",
+        },
+      })
+      .populate({
+        path: "followers",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      })
+      .populate({
+        path: "following",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      });
 
     if (!profile) {
       return res.status(400).json({ msg: "no profile exists" });
@@ -90,8 +92,7 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Handle already exists" }] });
       }
-    
-      
+
       if (profile) {
         //update profile
         profile = await Profile.findOneAndUpdate(
@@ -99,7 +100,7 @@ router.post(
           { $set: profileFields },
           { new: true }
         );
-      
+
         return res.json(profile);
       }
 
@@ -119,12 +120,10 @@ router.post(
 
 router.get("/user", async (req, res) => {
   try {
-    const profiles = await Profile.find({ type_of: false }, {contributions: 0, posts: 0, followers: 0,
-      following: 0 }).populate("user", [
-      "name",
-      "avatar",
-      "rating",
-    ]);
+    const profiles = await Profile.find(
+      { type_of: false },
+      { contributions: 0, posts: 0, followers: 0, following: 0, notifications:0 }
+    ).populate("user", ["name", "avatar", "rating"]);
 
     res.json(profiles);
   } catch (err) {
@@ -141,13 +140,15 @@ router.get("/user/:user_id", async (req, res) => {
     const profile = await Profile.findOne({
       user: req.params.user_id,
       type_of: false,
-    }).populate("user", ["name", "avatar", "rating"]).populate({
-      path:"contributions",
-      populate:{
-        path: 'comment',
-        model: 'Comment'
-      }
-    });
+    })
+      .populate("user", ["name", "avatar", "rating"])
+      .populate({
+        path: "contributions",
+        populate: {
+          path: "comment",
+          model: "Comment",
+        },
+      });
     if (!profile) return res.status(400).json({ msg: "profile not found" });
 
     res.json(profile);
@@ -165,12 +166,10 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.get("/organization", async (req, res) => {
   try {
-    const profiles = await Profile.find({ type_of: true },{contributions: 0, posts: 0, followers: 0,
-      following: 0 }).populate("user", [
-      "name",
-      "avatar",
-      "rating",
-    ]);
+    const profiles = await Profile.find(
+      { type_of: true },
+      { contributions: 0, posts: 0, followers: 0, following: 0, notifications: 0 }
+    ).populate("user", ["name", "avatar", "rating"]);
 
     res.json(profiles);
   } catch (err) {
@@ -187,13 +186,15 @@ router.get("/organization/:user_id", async (req, res) => {
     const profile = await Profile.findOne({
       user: req.params.user_id,
       type_of: true,
-    }).populate("user", ["name", "avatar", "rating"]).populate({
-      path:"posts",
-      populate:{
-        path: 'post',
-        model: 'Post'
-      }
-    });
+    })
+      .populate("user", ["name", "avatar", "rating"])
+      .populate({
+        path: "posts",
+        populate: {
+          path: "post",
+          model: "Post",
+        },
+      });
     if (!profile) return res.status(400).json({ msg: "profile not found" });
     res.json(profile);
   } catch (err) {
@@ -225,25 +226,22 @@ router.delete("/", auth, async (req, res) => {
 
 //follow an organization
 router.post("/follow/:id", auth, async (req, res) => {
-   
   try {
     const user = await Profile.findOne({ user: req.user.id });
     const organization = await Profile.findOne({
       user: req.params.id,
     }).populate("user", ["name", "avatar", "rating"]);
 
-    if(!user)
-    {
+    if (!user) {
       return res
-          .status(400)
-          .json({ errors: [{ msg: "Make a profile to continue" }] });
+        .status(400)
+        .json({ errors: [{ msg: "Make a profile to continue" }] });
     }
 
-    if(!organization)
-    {
+    if (!organization) {
       return res
-          .status(400)
-          .json({ errors: [{ msg: "Organization Not Found" }] });
+        .status(400)
+        .json({ errors: [{ msg: "Organization Not Found" }] });
     }
     //console.log(req.user.id);
     //console.log(organization);
@@ -274,50 +272,81 @@ router.post("/follow/:id", auth, async (req, res) => {
     await user.save();
     await organization.save();
     //console.log({profile: organization, state:1 });
-    return res.json({ profile: organization, state: 1 });
+    res.json({ profile: organization, state: 1 });
+    try {
+      const follower = await User.findById(req.user.id);
+      organization.count+=1;
+      if(organization.notifications.length === 10) {
+          organization.notifications.pop();
+      }
+      organization.notifications.unshift({
+          url: `/profile/user/${req.user.id}`,
+          text: `${follower.name} (@${user.handle}) started following you.`
+      })
+      await organization.save();
+      
+    } catch (e) {
+      console.log(e.message);
+      
+    }
+   
+    
+
+
+
   } catch (e) {
     console.log(e.message);
     res.status(500).send("server error");
   }
 });
 
-router.get('/followers/:id', auth, async(req, res) => {
-
-  try{
+router.get("/followers/:id", auth, async (req, res) => {
+  try {
     const organization = await Profile.findOne({
       user: req.params.id,
-    })
-    const userFollowers = organization.followers.map( item => item.user);
-    const followers = await Profile.find({ user:{ $in: userFollowers}}, {contributions: 0, posts: 0, followers: 0,
-    following: 0 }).populate("user", 
-    ["name", "avatar", "rating"]);
+    });
+    const userFollowers = organization.followers.map((item) => item.user);
+    const followers = await Profile.find(
+      { user: { $in: userFollowers } },
+      { contributions: 0, posts: 0, followers: 0, following: 0, notifications: 0 }
+    ).populate("user", ["name", "avatar", "rating"]);
     return res.json(followers);
-
-  }catch (err) {
+  } catch (err) {
     console.error(err.message);
     res.status(500).send("server error");
   }
-       
-})
+});
 
-router.get('/following/:id', auth, async(req, res) => {
-
-  try{
+router.get("/following/:id", auth, async (req, res) => {
+  try {
     const user = await Profile.findOne({
       user: req.params.id,
-    })
-     
-    const userFollowing = user.following.map( item => item.user);
-    const following = await Profile.find({ user:{ $in: userFollowing}}, {contributions: 0, posts: 0, followers: 0,
-      following: 0 }).populate("user", 
-    ["name", "avatar", "rating"]);
+    });
+
+    const userFollowing = user.following.map((item) => item.user);
+    const following = await Profile.find(
+      { user: { $in: userFollowing } },
+      { contributions: 0, posts: 0, followers: 0, following: 0, notifications:0 }
+    ).populate("user", ["name", "avatar", "rating"]);
 
     return res.json(following);
-
-  }catch (err) {
+  } catch (err) {
     console.error(err.message);
     res.status(500).send("server error");
   }
-       
-})
+});
+
+router.put("/notifications", auth, async (req, res) => {
+  try {
+      await Profile.findOneAndUpdate({user: req.body.id}, {
+        count: 0
+      })
+
+      return res.json({});
+      
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
 module.exports = router;

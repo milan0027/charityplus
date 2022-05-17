@@ -220,3 +220,12 @@ export const getLeaderboard = ()=> async dispatch => {
         });
     }
 }
+
+export const setNotificationsZero = (id) => async dispatch => {
+    try{
+        await axios.put('/api/profile/notifications', {id});
+    } catch(e){
+        console.log(e)
+
+    }
+}

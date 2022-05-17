@@ -120,7 +120,6 @@ router.get("/rating",  async (req, res) => {
           return 0;
       });
     
-     console.log(users);
       res.json(users);
     } catch (err) {
       console.error(err.message);

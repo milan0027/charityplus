@@ -566,6 +566,11 @@ button {
   margin-bottom: 0.5rem;
 }
 
+.notifications .post-date {
+  color: #aaa;
+  font-size: 1rem;
+}
+
 /* Mobile Styles */
 @media (max-width: 1000px) {
   .post-image {
