@@ -14,7 +14,7 @@ const CommentItem = ({
   organisationId,
   postId,
   event,
-  comment: { _id, text, name, avatar, user, date, likes, unlikes, approval, user_typeof },
+  comment: { _id, text, name, avatar, user, date, likes, unlikes, approval, user_typeof, image },
   auth,
   deleteComment,
   addCommentLike,
@@ -40,6 +40,9 @@ const CommentItem = ({
       <hr></hr>
       <div className='post-content'>
         <p className='my-1'>{text}</p>
+        <div >
+        { image.length > 0 && <img alt="post" src={image[0].url} className="post-image" ></img>}
+        </div>
         <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>

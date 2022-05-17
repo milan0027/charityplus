@@ -66,7 +66,7 @@ const PostItem = ({
               {unlikes.length > 0 && <span>{unlikes.length}</span>}
             </button>
             <Link to={`/posts/${_id}`} className='btn btn-primary'>
-              Discussion{" "}
+              Discussions{" "}
               {comments.length > 0 && (
                 <span className='comment-count'>{comments.length}</span>
               )}

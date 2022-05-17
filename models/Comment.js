@@ -18,8 +18,7 @@ const commentSchema=new Schema({
         type:String
     },
     image: [ {
-        url: String,
-        filename: String
+        url: String
     }],
     avatar: {
         type: String

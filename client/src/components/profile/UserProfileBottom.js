@@ -8,7 +8,7 @@ const UserProfileBottom = ({
 }) => {
   return (
     <div className='profile-about bg-light p-2 my-1'>
-        <h2 className='text-primary'>Contributions</h2>
+        <h2 className='text-primary'>Comments/Contributions</h2>
       {
           contributions && contributions.map(({comment})=>{
               return(
@@ -16,6 +16,7 @@ const UserProfileBottom = ({
               )
           })
       }
+      { contributions.length === 0 ?<h4>Nothing to display...</h4>:''} 
     </div>
   );
 };

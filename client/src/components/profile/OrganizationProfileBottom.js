@@ -22,7 +22,7 @@ const OrganizationProfileBottom = ({
                   <PostItem post={post} key={post._id.toString()} />
               )
           })
-      }</> )}
+      }{ posts.length === 0 ? <h4>Nothing to display...</h4>:''}</> )}
     </div>
   );
 };

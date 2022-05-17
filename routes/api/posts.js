@@ -264,7 +264,11 @@ router.post('/comment/:id',[auth, [
             user: req.user.id,
             post: req.params.id,
             approval: user.type_of || !post.event,
-            image: req.body.image,
+            image:  req.body.image.map(image => { 
+                return {
+                    url: image
+                }
+            }),
             post_event: post.event,
             user_typeof: user.type_of
         });

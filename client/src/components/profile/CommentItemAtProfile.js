@@ -5,7 +5,7 @@ import Moment from "react-moment";
 
 
 const CommentItemAtProfile = ({
-  comment: { _id, text, name, avatar, user,post, date,approval, post_event},
+  comment: { text, name, avatar, user,post, date,approval, post_event, image},
 }) => {
   //auth.user._id==organisationId
   // console.log(organisationId);
@@ -27,6 +27,9 @@ const CommentItemAtProfile = ({
       <hr></hr>
       <div className="post-content">
         <p className='my-1'>{text}</p>
+        <div >
+        { image.length > 0 && <img alt="post" src={image[0].url} className="post-image" ></img>}
+        </div>
         <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>

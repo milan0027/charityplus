@@ -14,7 +14,8 @@ import {
     UPDATE_COMMENT_UNLIKES,
     APPROVE_COMMENT,
     CLEAR_POST,
-    POSTING
+    POSTING,
+    COMMENTING
 } from './types';
 
 // get posts 
@@ -209,6 +210,41 @@ export const getPost = id => async dispatch => {
 
 // add comment
 export const addComment = (postId, formData) => async dispatch => {
+
+    dispatch({type:COMMENTING})
+    const { text, image} = formData
+    const array = [];
+    if(image !== "")
+    {
+        try {
+            const form = new FormData();
+            form.append('file',image);
+            form.append('upload_preset','anlkbjq8')
+            let instance = axios.create();
+            delete instance.defaults.headers.common['x-auth-token'];
+        
+            
+            const response = await instance.post('https://api.cloudinary.com/v1_1/webbid/image/upload', form)
+            console.log(response);
+            array.push(response.data.url.replace('upload/','upload/w_800,h_600,c_pad,b_white/'))
+            
+        } catch (err) {
+            console.log(err)
+            dispatch( setAlert("Error in Image Uploading", 'danger'))
+            dispatch({
+                type: POST_ERROR,
+                payload: { msg: err.response.statusText, status: err.response.status }
+            })
+
+            return;
+        }
+    }
+   
+  
+    const request = {
+        text,
+        image: array
+    }
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -216,16 +252,18 @@ export const addComment = (postId, formData) => async dispatch => {
     }
 
     try {
-        const res = await axios.post(`/api/posts/comment/${postId}`, formData, config)
+        const res = await axios.post(`/api/posts/comment/${postId}`, request, config)
 
         dispatch({
             type: ADD_COMMENT,
             payload: res.data.comments
         })
 
-        dispatch(setAlert('Comment Added', 'success'))
+        dispatch(setAlert('Content Added', 'success'))
         
     } catch (err) {
+      
+        dispatch( setAlert('Server Error', 'danger'))
         dispatch({
             type: POST_ERROR,
             payload: { msg: err.response.statusText, status: err.response.status }

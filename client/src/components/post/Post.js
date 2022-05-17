@@ -11,7 +11,7 @@ import { getCurrentProfile } from "../../actions/profile";
 import NotFound from "../layout/NotFound";
 import Alert from "../layout/alert";
 
-const Post = ({ getPost, post: { post, loading, error }, profile: {profile, loading: profileLoading}, getCurrentProfile }) => {
+const Post = ({ getPost, post: { post, loading, commenting, error }, profile: {profile, loading: profileLoading}, getCurrentProfile }) => {
   let { id } = useParams();
   useEffect(() => {
     getPost(id);
@@ -31,14 +31,15 @@ const Post = ({ getPost, post: { post, loading, error }, profile: {profile, load
               Back to Posts
             </Link>
             <PostItem post={post} showActions={false} />
-             {!profileLoading && profile ?<CommentForm postId = {post._id}/>:''}
-             <div className='bg-primary p'>
-                   <h3>Contributions</h3>
+             {!profileLoading && profile ?<CommentForm commenting={commenting} postId = {post._id}/>:''}
+             <div className='bg-primary p my-1'>
+                   <h3>Comments/Contributions</h3>
               </div>
             <div className="comments">
                 {post.comments.map(comment => (
                     <CommentItem key={comment._id} event={post.event} comment= {comment} postId={post._id} organisationId={post.user.toString()}/>
                 ))}
+                {post.comments.length === 0?<h4>Nothing to display...</h4>:''}
             </div>
           </>
         )}
