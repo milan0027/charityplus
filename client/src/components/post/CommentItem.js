@@ -31,9 +31,9 @@ const CommentItem = ({
           <img className='round-img' src={avatar} alt='' />
           <span className='post-name'>{name}</span>
         </Link>
-       {(!event || user_typeof) &&  <span className="post-heading-info">Comment</span>}
-        {event && !user_typeof && (approval?  <span className="post-heading-approved">Approved</span>:
-        <span className="post-heading-pending">Pending Approval</span>)}
+       {(!event || user_typeof) &&  <span className="post-heading-info hide-sm">Comment</span>}
+        {event && !user_typeof && (approval?  <span className="post-heading-approved hide-sm">Approved</span>:
+        <span className="post-heading-pending hide-sm">Pending Approval</span>)}
         
        
       </div>

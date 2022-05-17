@@ -571,12 +571,41 @@ button {
   font-size: 1rem;
 }
 
+footer{
+  position: absolute;
+  color: white;
+  padding: 8px;
+  font-size: 24px;
+  font-family: Consolas;
+  letter-spacing: 2.5px;
+ 
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+
+}
+.footer a{
+   color: white;
+   
+}
+.footer a:hover{
+   color: black;
+}
 /* Mobile Styles */
 @media (max-width: 1000px) {
   .post-image {
     display: block;
     margin: auto;
     width: 70%;
+  }
+  .navbar {
+    display: block;
+    text-align: center;
+  }
+
+  .navbar ul {
+    text-align: center;
+    justify-content: center;
   }
 }
 @media (max-width: 900px) {

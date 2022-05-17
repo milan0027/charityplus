@@ -18,10 +18,10 @@ const CommentItemAtProfile = ({
             <span className="post-name">{name}</span>
           </Link>
           
-          <span className="post-heading-info">{post_event ?"Contribution":"Comment"}</span>
+          <span className="post-heading-info hide-sm">{post_event ?"Contribution":"Comment"}</span>
        
-          {post_event && (approval?  <span className="post-heading-approved">Approved</span>:
-        <span className="post-heading-pending">Pending Approval</span>)} 
+          {post_event && (approval?  <span className="post-heading-approved hide-sm">Approved</span>:
+        <span className="post-heading-pending hide-sm">Pending Approval</span>)} 
         
       </div>
       <hr></hr>

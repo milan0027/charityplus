@@ -9,21 +9,25 @@ const Navbar = ({ auth: {isAuthenticated, loading}, logout}) => {
   <ul>
     <li>
       <Link to="/posts">
-        Posts & Events
+      <i className="fas fa-sticky-note"></i>{' '}
+      <span className='hide-sm'>Posts</span>
       </Link>
     </li>
     <li>
       <Link to="/userprofiles">
-        Users
+      <i className="fas fa-users"></i>{' '}
+      <span className='hide-sm'>Users</span>
       </Link>
     </li>
     <li>
       <Link to="/organizationprofiles">
-        Organizations
+      <i className="fas fa-globe"></i>{' '}
+      <span className='hide-sm'>Organizations</span>
       </Link>
     </li>
     <li><Link to="/leaderboard">
-      <span className='hide-sm'>Leaderboard</span></Link>
+    <i className="fas fa-sort-amount-up"></i>{' '}
+    <span className='hide-sm'>Leaderboard</span></Link>
     </li>
     <li><Link to="/dashboard">
       <i className='fas fa-user'></i>{' '}
@@ -51,7 +55,7 @@ const Navbar = ({ auth: {isAuthenticated, loading}, logout}) => {
  
        <nav className="navbar bg-dark">
       <h1>
-        <Link to="/"><i className="fas fa-dove"></i> CharityPlus</Link>
+        <Link to="/"><i className="fas fa-dove"></i> Charity Plus</Link>
       </h1>
 
       { !loading && (<Fragment>{ isAuthenticated? authLinks: guestLinks }</Fragment>)}
