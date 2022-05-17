@@ -1,4 +1,3 @@
 {
-    "mongoURI":"mongodb+srv://milan0027:password27@cluster0.znrfi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "jwtSecret":"YeMelaAreaHai"
 }
