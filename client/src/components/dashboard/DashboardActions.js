@@ -77,6 +77,9 @@ const DashboardActions = ({ profile, id, setNotificationsZero }) => {
                 </div>
               </Link>
             ))}
+            {
+              profile.notifications.length === 0 && <h3>No new notifications</h3>
+            }
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Close</Button>

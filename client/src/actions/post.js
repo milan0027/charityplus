@@ -136,7 +136,6 @@ export const addPost = formData => async dispatch => {
         
             
             const response = await instance.post('https://api.cloudinary.com/v1_1/webbid/image/upload', form)
-            console.log(response);
             array.push(response.data.url.replace('upload/','upload/w_800,h_600,c_pad,b_white/'))
             
         } catch (err) {
@@ -225,7 +224,6 @@ export const addComment = (postId, formData) => async dispatch => {
         
             
             const response = await instance.post('https://api.cloudinary.com/v1_1/webbid/image/upload', form)
-            console.log(response);
             array.push(response.data.url.replace('upload/','upload/w_800,h_600,c_pad,b_white/'))
             
         } catch (err) {

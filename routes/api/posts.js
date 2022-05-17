@@ -379,7 +379,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
         (comment) => comment.comment.toString() === req.params.comment_id
       ).length > 0
     ) {
-      console.log(1);
+      // console.log(1);
       const removalIndex = profile.contributions
         .map((comment) => comment.comment.toString())
         .indexOf(req.params.comment_id);
@@ -389,7 +389,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     await post.save();
     await comment.remove();
     await profile.save();
-    console.log(profile);
+    //console.log(profile);
     res.json({}); //what to return? krdia ab solly
 
     try {
@@ -412,7 +412,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
           url: `/posts/${post._id.toString()}`,
           text: `Your contribution was denied for the event created by ${post.name} (@${organization.handle})`,
         });
-        console.log(profile);
+        //console.log(profile);
         await profile.save();
       }
     } catch (e) {

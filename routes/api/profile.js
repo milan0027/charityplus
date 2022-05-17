@@ -168,7 +168,6 @@ router.post(
       })
 
       return res.json(resProfile);
-      res.json(resProfile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");

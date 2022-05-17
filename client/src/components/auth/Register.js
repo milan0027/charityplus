@@ -33,8 +33,6 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     e.preventDefault();
     if (password !== password2)  setAlert('Passwords do not match', 'danger', 5000)
     else {
-     
-      console.log(formData)
       register({ name, email,type_of: value, password})
     }
   };
