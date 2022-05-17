@@ -8,7 +8,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 const UserProfileTop = ({
   otherprofile: {
     location,
@@ -55,53 +55,60 @@ const UserProfileTop = ({
         <div>
           <h2>{name}</h2>
           <h4>@{handle}</h4>
-          <h4><i className="fas fa-star"></i> {rating}</h4>
+          <h4>
+            <i className='fas fa-star'></i> {rating}
+          </h4>
           <h4 className='my-1'>
             {location && (
               <span>
-                <i className='fa fa-map-marker' aria-hidden='true'></i> {location}
+                <i className='fa fa-map-marker' aria-hidden='true'></i>{" "}
+                {location}
               </span>
             )}
           </h4>
 
           <div className='icons'>
             {website && (
-              <Link to={website} target='_blank'>
+              <a href={website} target='_blank' rel='noopener noreferrer'>
                 <i className='fab fa-globe fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.twitter && (
-              <Link
-                to={social.twitter}
+              <a
+                href={social.twitter}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-twitter fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.facebook && (
-              <Link
-                to={social.facebook}
+              <a
+                href={social.facebook}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-facebook fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.linkedin && (
-              <Link
-                to={social.linkedin}
+              <a
+                href={social.linkedin}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-linkedin fa-2x'></i>
-              </Link>
+              </a>
             )}
 
             {social && social.instagram && (
-              <Link
-                to={social.instagram}
+              <a
+                href={social.instagram}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-instagram fa-2x'></i>
-              </Link>
+              </a>
             )}
           </div>
         </div>

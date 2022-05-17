@@ -8,7 +8,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 const OrganizationProfileTop = ({
   otherprofile: {
     type_of,
@@ -23,9 +23,7 @@ const OrganizationProfileTop = ({
   follow,
   id,
   getFollowers,
-  profile: {
-    profiles
-  }
+  profile: { profiles },
 }) => {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
@@ -51,8 +49,8 @@ const OrganizationProfileTop = ({
   }, [open]);
 
   useEffect(() => {
-    getFollowers(id)
-  },[getFollowers, id])
+    getFollowers(id);
+  }, [getFollowers, id]);
   return (
     <>
       <div className='profile-top bg-primary p-2'>
@@ -66,69 +64,73 @@ const OrganizationProfileTop = ({
           <h4 className='my-1'>
             {location && (
               <span>
-                <i className='fa fa-map-marker' aria-hidden='true'></i> {location}
+                <i className='fa fa-map-marker' aria-hidden='true'></i>{" "}
+                {location}
               </span>
             )}
           </h4>
 
           <div className='icons'>
-          {website && (
-              <Link to={website} target='_blank'>
+            {website && (
+              <a href={website} target='_blank' rel='noopener noreferrer'>
                 <i className='fab fa-globe fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.twitter && (
-              <Link
-                to={social.twitter}
+              <a
+                href={social.twitter}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-twitter fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.facebook && (
-              <Link
-                to={social.facebook}
+              <a
+                href={social.facebook}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-facebook fa-2x'></i>
-              </Link>
+              </a>
             )}
             {social && social.linkedin && (
-              <Link
-                to={social.linkedin}
+              <a
+                href={social.linkedin}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-linkedin fa-2x'></i>
-              </Link>
+              </a>
             )}
 
             {social && social.instagram && (
-              <Link
-                to={social.instagram}
+              <a
+                href={social.instagram}
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <i className='fab fa-instagram fa-2x'></i>
-              </Link>
+              </a>
             )}
           </div>
         </div>
         <div>
-
-         {  auth.isAuthenticated &&
+          {auth.isAuthenticated &&
             auth.loading === false &&
-            !auth.user.type_of &&
-             <button
-            onClick={(e) => follow(id)}
-            className='btn btn-dark'
-            style={{ width: "160px" }}
-          >
-            {
-            followers.filter((item) => item.user.toString() === auth.user._id
-            )
-              .length > 0
-              ? "Unfollow"
-              : "Follow"}
-          </button>}
+            !auth.user.type_of && (
+              <button
+                onClick={(e) => follow(id)}
+                className='btn btn-dark'
+                style={{ width: "160px" }}
+              >
+                {followers.filter(
+                  (item) => item.user.toString() === auth.user._id
+                ).length > 0
+                  ? "Unfollow"
+                  : "Follow"}
+              </button>
+            )}
           <button
             onClick={handleClickOpen("paper")}
             className='btn btn-dark my-1'
@@ -157,26 +159,21 @@ const OrganizationProfileTop = ({
           )}
         </DialogTitle>
         <DialogContent dividers={scroll === "paper"}>
-          
-            {profiles == null ? (
-              <h2>Loading Profiles ...</h2>
-            ) : (
-              <>
-                <div className='profiles'>
-                  {profiles.length > 0 ? (
-                    profiles.map((profile) => (
-                      <ProfileItem
-                        key={profile._id}
-                        profile={profile}
-                      />
-                    ))
-                  ) : (
-                    <h2>No profiles to display ...</h2>
-                  )}
-                </div>
-              </>
-            )}
-         
+          {profiles == null ? (
+            <h2>Loading Profiles ...</h2>
+          ) : (
+            <>
+              <div className='profiles'>
+                {profiles.length > 0 ? (
+                  profiles.map((profile) => (
+                    <ProfileItem key={profile._id} profile={profile} />
+                  ))
+                ) : (
+                  <h2>No profiles to display ...</h2>
+                )}
+              </div>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
@@ -191,10 +188,12 @@ OrganizationProfileTop.propTypes = {
   auth: PropTypes.object.isRequired,
   follow: PropTypes.func.isRequired,
   getFollowers: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  profile: state.profile
+  profile: state.profile,
 });
-export default connect(mapStateToProps, { follow, getFollowers })(OrganizationProfileTop);
+export default connect(mapStateToProps, { follow, getFollowers })(
+  OrganizationProfileTop
+);
