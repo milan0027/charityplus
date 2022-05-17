@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,25 +12,18 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
-function createData(name,handle,rating) {
-    return {
-      name,
-      handle,
-      rating,
-      monthlyRating:rating
-    };
-  }
+// function createData(name,handle,rating) {
+//     return {
+//       name,
+//       handle,
+//       rating,
+//       monthlyRating:rating
+//     };
+//   }
 
-const rows = [
+//const rows = [
 //   createData('Cupcake', 305, 3.7, 67, 4.3),
 //   createData('Donut', 452, 25.0, 51, 4.9),
 //   createData('Eclair', 262, 16.0, 24, 6.0),
@@ -45,7 +37,7 @@ const rows = [
 //   createData('Marshmallow', 318, 0, 81, 2.0),
 //   createData('Nougat', 360, 19.0, 9, 37.0),
 //   createData('Oreo', 437, 18.0, 63, 4.0),
-];
+//];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -65,23 +57,29 @@ function getComparator(order, orderBy) {
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+// function stableSort(array, comparator) {
+//   const stabilizedThis = array.map((el, index) => [el, index]);
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) {
+//       return order;
+//     }
+//     return a[1] - b[1];
+//   });
+//   return stabilizedThis.map((el) => el[0]);
+// }
 
 const headCells = [
+//   {
+//     id: 'serialNo',
+//     numeric: false,
+//     disablePadding: false,
+//     label: 'S No.'
+//  },
   {
     id: 'name',
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: 'Username',
   },
   {
@@ -101,11 +99,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Monthly Rating',
-  }
+  },
+ 
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const {  order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -114,7 +113,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -124,26 +123,39 @@ function EnhancedTableHead(props) {
               'aria-label': 'select all desserts',
             }}
           />
-        </TableCell>
+        </TableCell> */}
+
+         <TableCell
+            key="serialNo"
+            align='right'
+            padding='checkbox'
+            style={{fontFamily:'monospace'}}
+          >
+          S No.
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{fontFamily:'monospace'}}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
+          {headCell.numeric? <TableSortLabel
+            active={orderBy === headCell.id}
+            direction={orderBy === headCell.id ? order : 'asc'}
+            onClick={createSortHandler(headCell.id)}
+            
+          >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
-            </TableSortLabel>
+            </TableSortLabel>:<> {headCell.label}</>
+             
+           }
           </TableCell>
         ))}
       </TableRow>
@@ -161,52 +173,28 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-
+ 
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
+        
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
+     
         <Typography
           sx={{ flex: '1 1 100%' }}
           variant="h6"
           id="tableTitle"
           component="div"
+          style={{fontFamily:'monospace'}}
         >
-          Nutrition
+          Leaderboard
         </Typography>
-      )}
+    
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      
     </Toolbar>
   );
 };
@@ -215,21 +203,20 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({users}) {
+export default function EnhancedTable({rows}) {
     
     
-    React.useEffect(()=>{
-        users.forEach(item =>{
-            console.log(1);
-            rows.push(createData(item.user.name,item.handle,item.user.rating));
-        })
-    },[users]);
+    // React.useEffect(()=>{
+    //     users.forEach(item =>{
+    //         console.log(1);
+    //         rows.push(createData(item.user.name,item.handle,item.user.rating));
+    //     })
+    // },[users]);
     // console.log(rows);
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('rating');
+  const [order, setOrder] = React.useState('desc');
+  const [orderBy, setOrderBy] = React.useState('montlyRating');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
@@ -276,9 +263,6 @@ export default function EnhancedTable({users}) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -287,14 +271,14 @@ export default function EnhancedTable({users}) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: '100%' }} >
+      <Paper sx={{ width: '100%', mb: 2 }} >
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
+        <TableContainer >
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -303,6 +287,7 @@ export default function EnhancedTable({users}) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -324,8 +309,9 @@ export default function EnhancedTable({users}) {
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
+                      
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -333,27 +319,26 @@ export default function EnhancedTable({users}) {
                             'aria-labelledby': labelId,
                           }}
                         />
-                      </TableCell>
+                      </TableCell> */}
+                      <TableCell align="right" padding='checkbox' style={{fontFamily:'monospace'}}>{index+1}.</TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
-                        padding="none"
+                        padding="normal"
+                        style={{fontFamily:'monospace'}}
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.handle}</TableCell>
-                      <TableCell align="right">{row.rating}</TableCell>
-                      <TableCell align="right">{row.monthlyRating}</TableCell>
+                      <TableCell align="left" style={{fontFamily:'monospace'}}>@{row.handle}</TableCell>
+                      <TableCell align="right" style={{fontFamily:'monospace'}}>{row.rating}</TableCell>
+                      <TableCell align="right" style={{fontFamily:'monospace'}}>{row.monthlyRating}</TableCell>
                       {/* <TableCell align="right">{row.protein}</TableCell> */}
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
                 >
                   <TableCell colSpan={6} />
                 </TableRow>
@@ -369,12 +354,10 @@ export default function EnhancedTable({users}) {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+    
     </Box>
   );
 }

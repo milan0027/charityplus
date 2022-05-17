@@ -13,7 +13,7 @@ const Leaderboard = ({ leaderboard: { users, loading, error }, getLeaderboard })
 //   console.log(users);
   return (
     <section className='container'>
-      {loading || users ===  null ? <Spinner /> :<EnhancedTable users={users} />}
+      {loading || users ===  null ? <Spinner /> :<EnhancedTable rows={users} />}
     </section>
   );
 };

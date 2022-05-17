@@ -13,7 +13,8 @@ import {
     UPDATE_COMMENT_LIKES,
     UPDATE_COMMENT_UNLIKES,
     APPROVE_COMMENT,
-    CLEAR_POST
+    CLEAR_POST,
+    POSTING
 } from './types';
 
 // get posts 
@@ -119,32 +120,66 @@ export const deletePost = id => async dispatch => {
 // add post
 export const addPost = formData => async dispatch => {
     //console.log(formData)
-    
-    console.log(formData.get('image'))
-    console.log(formData.get('text'))
+  
+    dispatch({type:POSTING})
+    const { text, value, image} = formData
+    const array = [];
+    if(image !== "")
+    {
+        try {
+            const form = new FormData();
+            form.append('file',image);
+            form.append('upload_preset','anlkbjq8')
+            let instance = axios.create();
+            delete instance.defaults.headers.common['x-auth-token'];
+        
+            
+            const response = await instance.post('https://api.cloudinary.com/v1_1/webbid/image/upload', form)
+            console.log(response);
+            array.push(response.data.url.replace('upload/','upload/w_800,h_600,c_pad,b_white/'))
+            
+        } catch (err) {
+            console.log(err)
+            dispatch( setAlert("Error in Image Uploading", 'danger'))
+            dispatch({
+                type: POST_ERROR,
+                payload: { msg: err.response.statusText, status: err.response.status }
+            })
+
+            return;
+        }
+    }
+   
     const config = {
         headers: {
-            'content-type': `multipart/form-data`
-        },
+            'Content-Type': 'application/json'
+        }
     }
   
-
+    const request = {
+        text,
+        value,
+        image: array
+    }
     
     try {
-        const res = await axios.post(`/api/posts`, formData, config)
+        const res = await axios.post(`/api/posts`, request, config)
 
         dispatch({
             type: ADD_POST,
             payload: res.data
         })
 
-        dispatch(setAlert('Post Added', 'success'))
+        dispatch(setAlert(value==='event'?'Event Created':'Post Created', 'success'))
         
     } catch (err) {
         const errors = err.response.data.errors
 
         if(errors) {
             errors.forEach(error => dispatch( setAlert(error.msg, 'danger')))
+        }
+        else {
+            dispatch( setAlert('Server Error', 'danger'))
         }
         dispatch({
             type: POST_ERROR,
@@ -175,7 +210,7 @@ export const getPost = id => async dispatch => {
 // add comment
 export const addComment = (postId, formData) => async dispatch => {
     const config = {
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     }
@@ -201,7 +236,7 @@ export const addComment = (postId, formData) => async dispatch => {
 // delete comment
 export const deleteComment = (postId, commentId) => async dispatch => {
     const config = {
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     }
@@ -272,7 +307,7 @@ export const removeCommentLike = (postId, commentId) => async dispatch => {
 // approve comment
 export const approveComment = (postId, commentId) => async dispatch => {
     const config = {
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     }

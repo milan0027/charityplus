@@ -96,21 +96,32 @@ router.get("/rating",  async (req, res) => {
       const profiles = await Profile.find({ type_of: false }, {contributions: 0, posts: 0, followers: 0,
       following: 0, location:0 , bio:0 , type_of:0 }).populate("user", [
       "name",
-      "avatar",
       "rating",
       "_id"
       ]);
 
-      profiles.sort((x,y)=>{
-          if(x.user.rating>y.user.rating) return -1;
-          if(x.user.rating<y.user.rating) return 1;
-          return 0;
-      });
       if (!profiles) {
         return res.status(400).json({ msg: "no users found" });
       }
-    //   console.log(profiles);
-      res.json(profiles);
+
+      const users = profiles.map(item => {
+         return { 
+          name: item.user.name,
+          handle: item.handle,
+          rating: item.user.rating,
+          monthlyRating: item.user.rating,
+          _id: item.user._id.toString()
+         }
+      })
+
+      users.sort((x,y)=>{
+          if(x.rating>y.rating) return -1;
+          if(x.rating<y.rating) return 1;
+          return 0;
+      });
+    
+     console.log(users);
+      res.json(users);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");

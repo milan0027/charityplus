@@ -11,7 +11,9 @@ import {
   REMOVE_COMMENT,
   UPDATE_COMMENT_LIKES,
   UPDATE_COMMENT_UNLIKES,
-  APPROVE_COMMENT
+  APPROVE_COMMENT,
+  POSTING,
+  COMMENTING
 } from "../actions/types";
 
 const initialState = {
@@ -19,6 +21,8 @@ const initialState = {
   post: null,
   loading: true,
   error: null,
+  posting: false,
+  commenting: false,
 };
 
 function post(state = initialState, action) {
@@ -44,6 +48,7 @@ function post(state = initialState, action) {
         ...state,
         posts: [payload, ...state.posts],
         loading: false,
+        posting: false,
         error: null,
       };
     case DELETE_POST:
@@ -65,6 +70,8 @@ function post(state = initialState, action) {
         ...state,
         error: payload,
         loading: false,
+        posting: false,
+        commenting: false,
       };
     case UPDATE_LIKES:
       return {
@@ -115,6 +122,7 @@ function post(state = initialState, action) {
         ...state,
         post: { ...state.post, comments: payload },
         loading: false,
+        commenting: false,
         error: null,
       };
     case REMOVE_COMMENT:
@@ -140,6 +148,16 @@ function post(state = initialState, action) {
         },
         loading:false,
         error:null
+      }
+    case POSTING:
+      return {
+      ...state,
+      posting: true
+    }
+    case COMMENTING:
+      return {
+        ...state,
+        commenting: true
       }
     default:
       return state;

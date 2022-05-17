@@ -8,7 +8,7 @@ import PostItem from './PostItem';
 import Alert from "../layout/alert";
 import PostForm from './PostForm';
 
-const Posts = ({ getPosts, post: { posts, loading }, getCurrentProfile, profile: {profile, loading: profileLoading}}) => {
+const Posts = ({ getPosts, post: { posts, loading, posting }, getCurrentProfile, profile: {profile, loading: profileLoading}}) => {
     useEffect(()=> {
         getPosts()
         getCurrentProfile()
@@ -23,7 +23,7 @@ const Posts = ({ getPosts, post: { posts, loading }, getCurrentProfile, profile:
       <p className='lead'>
           <i className='fas fa-user'></i> Welcome to the Community
       </p>
-     {!profileLoading &&profile&& profile.type_of? <PostForm/>:''}
+     {!profileLoading &&profile&& profile.type_of? <PostForm posting={posting}/>:''}
       <div className='posts'>
           {posts.map(post => (
               <PostItem key={post._id} post={post} ></PostItem>

@@ -9,7 +9,7 @@ const PostItem = ({
   removeLike,
   deletePost,
   auth,
-  post: { _id, text, name, avatar, user, likes, unlikes, comments, date, event },
+  post: { _id, text, name, avatar, user, likes, unlikes, comments, date, event, image },
   showActions,
 }) => {
   return (
@@ -26,9 +26,13 @@ const PostItem = ({
       <hr></hr>
       <div className="post-content">
         <p className='my'>{text}</p>
+        <div >
+        { image.length > 0 && <img alt="post" src={image[0].url} className="post-image" ></img>}
+        </div>
         <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>
+       
 
         {showActions && (
           <>
