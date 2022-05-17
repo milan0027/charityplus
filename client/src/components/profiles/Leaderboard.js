@@ -13,6 +13,7 @@ const Leaderboard = ({ leaderboard: { users, loading, error }, getLeaderboard })
 //   console.log(users);
   return (
     <section className='container'>
+       <h1 className='large text-primary'>Leaderboard</h1>
       {loading || users ===  null ? <Spinner /> :<EnhancedTable rows={users} />}
     </section>
   );

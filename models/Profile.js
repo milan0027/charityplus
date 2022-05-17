@@ -79,7 +79,21 @@ const ProfileShcema = new Schema({
         instagram: {
           type: String
         }
+      },
+    notifications:[
+      {
+        url:String,
+        text:String,
+        date: {
+          type: Date,
+          default: Date.now
+        }
       }
+    ],
+    count:{
+      type:Number,
+      default:0
+    }
 })
 
 module.exports = Profile = mongoose.model('profile',ProfileShcema)

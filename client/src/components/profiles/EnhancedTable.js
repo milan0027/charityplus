@@ -13,7 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
-
+import { Link } from 'react-router-dom';
 // function createData(name,handle,rating) {
 //     return {
 //       name,
@@ -92,13 +92,13 @@ const headCells = [
     id: 'rating',
     numeric: true,
     disablePadding: false,
-    label: 'Rating',
+    label: 'Stars',
   },
   {
     id: 'monthlyRating',
     numeric: true,
     disablePadding: false,
-    label: 'Monthly Rating',
+    label: 'Monthly Stars',
   },
  
 ];
@@ -190,7 +190,7 @@ const EnhancedTableToolbar = (props) => {
           component="div"
           style={{fontFamily:'monospace'}}
         >
-          Leaderboard
+          Top 3 users with highest monthly stars get to win exciting prizes every month.
         </Typography>
     
 
@@ -327,10 +327,11 @@ export default function EnhancedTable({rows}) {
                         scope="row"
                         padding="normal"
                         style={{fontFamily:'monospace'}}
-                      >
+                      ><Link to={`/profile/user/${row._id}`}>
                         {row.name}
+                      </Link>
                       </TableCell>
-                      <TableCell align="left" style={{fontFamily:'monospace'}}>@{row.handle}</TableCell>
+                      <TableCell align="left" style={{fontFamily:'monospace'}}><Link  to={`/profile/user/${row._id}`}>@{row.handle}</Link></TableCell>
                       <TableCell align="right" style={{fontFamily:'monospace'}}>{row.rating}</TableCell>
                       <TableCell align="right" style={{fontFamily:'monospace'}}>{row.monthlyRating}</TableCell>
                       {/* <TableCell align="right">{row.protein}</TableCell> */}

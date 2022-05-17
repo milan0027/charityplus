@@ -13,8 +13,9 @@ const DashboardActions = ({profile, id}) => {
     <>
     
     <div className="dash-buttons m-2">
-        <Link to="/edit-profile" className="btn btn-light">
+        <Link to="/edit-profile" className="btn btn-primary">
           <i className="fas fa-user-circle text-primary"></i> Edit Profile</Link>
+        <button className='btn btn-primary'>Notifications</button>
     </div>
         { profile.type_of? (<> <div className='my-1'>
               <OrganizationProfileTop otherprofile={profile} id={id} />
