@@ -149,17 +149,14 @@ router.delete("/:id", auth, async (req, res) => {
     res.json({ msg: "post removed" });
     //remove all comments connected to this post (shoudl do or shouldn't?)
 
-
     try {
-         //decrease activity of organization
-    const user = await User.findById(req.user.id).select("-password");
-    user.rating -= 1;
-    await user.save();
-        
+      //decrease activity of organization
+      const user = await User.findById(req.user.id).select("-password");
+      user.rating -= 1;
+      await user.save();
     } catch (e) {
-        console.log(e.message)
+      console.log(e.message);
     }
-   
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId")
@@ -341,15 +338,16 @@ router.post(
 // @access  Private
 router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   try {
-    //find the user
-    const profile = await Profile.findOne({ user: req.user.id });
-
     //find the post
     const post = await Post.findById(req.params.id);
 
     //find the required comment
     const comment = await Comment.findById(req.params.comment_id);
 
+    //find the user
+    const profile = await Profile.findOne({
+      user: comment.user.toString(),
+    });
     //check if the post exists
     if (!post) {
       res.status(400).json({ msg: "post doesnt exist!" });
@@ -381,6 +379,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
         (comment) => comment.comment.toString() === req.params.comment_id
       ).length > 0
     ) {
+      console.log(1);
       const removalIndex = profile.contributions
         .map((comment) => comment.comment.toString())
         .indexOf(req.params.comment_id);
@@ -390,6 +389,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     await post.save();
     await comment.remove();
     await profile.save();
+    console.log(profile);
     res.json({}); //what to return? krdia ab solly
 
     try {
@@ -412,6 +412,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
           url: `/posts/${post._id.toString()}`,
           text: `Your contribution was denied for the event created by ${post.name} (@${organization.handle})}`,
         });
+        console.log(profile);
         await profile.save();
       }
     } catch (e) {

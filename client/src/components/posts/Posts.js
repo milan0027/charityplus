@@ -19,7 +19,7 @@ const Posts = ({ getPosts, post: { posts, loading, posting }, getCurrentProfile,
         <Alert/>
       {loading ? (<Spinner/>) : ( 
           <>
-      <h1 className='large text-primary'>Posts</h1>
+      <h1 className='large text-primary'>Posts & Events</h1>
       <p className='lead'>
           <i className='fas fa-user'></i> Welcome to the Community
       </p>

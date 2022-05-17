@@ -40,10 +40,18 @@ return(
       <Route path="/" element={<Landing/>}/>
       <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/userprofiles" element={<UserProfiles />} />
-        <Route path="/organizationprofiles" element={<OrganizationProfiles />} />
-        <Route path='/profile/user/:id' element={<UserProfile/>} />
-         <Route path='/profile/organization/:id' element={<OrganizationProfile/>} />
+        <Route path="/userprofiles" element={<PrivateRoute>
+          <UserProfiles />
+          </PrivateRoute>} />
+        <Route path="/organizationprofiles" element={<PrivateRoute>
+          <OrganizationProfiles />
+          </PrivateRoute>} />
+        <Route path='/profile/user/:id' element={<PrivateRoute>
+          <UserProfile/>
+          </PrivateRoute>} />
+         <Route path='/profile/organization/:id' element={<PrivateRoute>
+          <OrganizationProfile/>
+           </PrivateRoute>} />
         <Route path='/dashboard' element={<PrivateRoute>
           <Dashboard/>
         </PrivateRoute>} />

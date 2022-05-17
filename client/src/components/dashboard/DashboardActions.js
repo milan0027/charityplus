@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import OrganizationProfileTop from "../profile/OrganizationProfileTop";
@@ -40,6 +40,10 @@ const DashboardActions = ({ profile, id, setNotificationsZero }) => {
       }
     }
   }, [open]);
+
+  useEffect(()=>{
+    setNotCount(profile.count)
+  },[profile.count])
   return (
     <>
       <div className='dash-buttons my-2'>
