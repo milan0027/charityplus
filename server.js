@@ -31,7 +31,6 @@ app.use(express.json({ extended: false }))
 // parse application/json
 //app.use(bodyParser.json())
 app.use(fileUpload()); 
-app.get('/', (req,res) => res.send('API Running'))
 
 //routes
 app.use('/api/users', require('./routes/api/users'))
