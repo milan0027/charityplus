@@ -54,7 +54,7 @@ An Organization can
 * Leaderboard can be toggled to shows the users in ascending/descending order of their all time stars or monthly stars.
 ## View live App
 
-Hosted at **https://charityplus.herokuapp.com/**
+Hosted at **https://charityplus.onrender.com**
 
 
 ## Tech Stack Used
